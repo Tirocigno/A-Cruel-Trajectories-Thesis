@@ -8,17 +8,49 @@
 
 Template LaTeX per una tesi per l'Università di Bologna, Dipartimento di Informatica - Scienza e Ingegneria.
 
-## Tutorial
+## BILab Linee guida tesi
 
-Utilizzare il bottone <kbd>Use this template</kbd> per generare un nuovo repository per realizzare la propria tesi di laurea.
-
-[![Use this template explaination](https://help.github.com/assets/images/help/repository/use-this-template-button.png)](https://help.github.com/en/articles/creating-a-repository-from-a-template)
-
-Per l'utilizzo, si consiglia di utilizzare una versione recente di TeXLive (2018+), di MikTeX o di MacTeX (non testato) e di avere installato un Java Runtime Environment con versione compresa tra 5 e 10 (testato OpenJDK 8).
-
-Inoltre, si consiglia di installare Python 3.x e il pacchetto `pygments` per permettere l'evidenziazione del codice.
-
-Vedere la sezione [Dettagli tecnici](#dettagli-tecnici) per ulteriori dettagli.
+0. Consegna dei capitoli
+    - Ogni capitolo va consegnato una sola volta, uno per volta
+    - Prima di consegnarlo, metterlo "nel cassetto" 2-3 giorni e rileggerlo
+0. Linguaggio
+    - Evitare sempre commenti non oggettivi/superficiali/informali (o sono supportati da citazioni o non si mettono). Ad esempio: banale, semplice, facile, difficile, molto, troppo, poco, impossibile
+    - Concisione: Non scrivere frasi più lunghe di *due* righe
+        - Esempio No: L'idea di traiettoria si delinea nell'abilità di catturare gli spostamenti di un oggetto
+        - Esempio Sì: La definizione di traiettoria è: "testo quotato" [citazione]
+    - **Evitare** l'abuso di **grassetto** e *corsivo*
+0. Inglesismi
+    - Se le tesi è in Italiano è bene scrivere in Italiano e limitare l'uso dell'inglese il più possibile (e.g., "Trajectory Mining" -> "Mining di traiettorie")
+        - Ovviamente non tutto può essere tradotto in Italiano (e.g., clustering, mining, deploy, etc.)
+    - Usa un termine inglese se questo si ripete ma spiegalo una sola volta.
+    - Un acronimo in inglese rimane in inglese: GPS (Global Positioning System) e non si usa il plurale
+    - La prima volta in assoluto che il termine compare scrivilo in corsivo. Esempio "I *layer* (livelli) di un GIS (*Geographic Information System*)"
+0. Sezioni e paragrafi
+    - Usare le `\ref{}` di Latex per fare riferimento a capitoli/sezioni/sottosezioni/immagini
+        - I riferimenti vanno preceduti da parola con iniziale maiuscola (Figura \ref{label} e non figura \ref{label}), oppure usare il package `cleveref` in Latex
+        - Quando si descrive un argomento è bene averlo già introdotto. Se non indispensabili, evitare le *forword reference* (riferimento a capitoli/sezioni/sottosezioni che appaiono dopo essere referenziati)
+    - Non creare sezioni con singola sottosezione
+    - Esiste differenza tra `.` e `. a capo`: `. a capo` si usa per cambiare discorso
+    - Evita di disperdere le informazioni: definizione, dettagli e implicazioni stanno nello stesso paragrafo
+0. Citazioni e copia/incolla
+    - Non citare Wikipedia (su https://scholar.google.it/ esiste un oceano di letteratura)
+        - Se necessario, sfruttare Wikipedia per trovare le citazioni a paper/libri
+    - Non copiare testi troppo lunghi, è meglio riassumerli ed elaborarli
+    - Non copiare traduzioni troppo lunghe, è meglio riassumerle ed elaborarle
+    - Esplicita la parte di testo copiata inserendola tra virgolette e aggiungi la citazione finale
+        - Esempio: "Aggiungere inglesismi random non improva le vostre skills" [[Questa è una cit]](http://www.lercio.it/ricerca-aggiungere-inglesismi-random-non-improva-le-vostre-skills/)
+    - La citazione precede il `.`: Testo citato [citazione]. (e non: Testo citato. [citazione]
+0. Figure:
+    - Se una figura è copiata/rielaborata indica la sorgente
+    - Utilizzare figure in formato vettoriale (.pdf, .svg)
+    - In caso di screenshot, attenzione alle dimensioni (in MB) della figura
+0. Punteggiatura, elenchi (e coerenza)
+    - No punti nei titoli
+    - Non `E'` ma `È` (È = Alt + 0200)  
+    - In Latex si virgolette si fanno \`\`così'' (\` = Alt + 96) e non "così"
+    - Elenchi puntati iniziano con Maiuscola, finiscono con `;` o con `.` (l'importante è usare la stessa convenzione). Di solito si usa `;` per terminare frasi di senso non compiuto, e `.` per terminare frasi di senso compiuto
+    - No `...`, sì "etc." 
+0. Link di riferimento per elaborato tesi https://corsi.
 
 ## [Requisiti](https://corsi.unibo.it/magistrale/IngegneriaScienzeInformatiche/volume-pdf-e-deposito-online-dellelaborato) e [Norme redazionali](https://corsi.unibo.it/magistrale/IngegneriaScienzeInformatiche/redazione-tesi-voto-finale) della tesi
 
