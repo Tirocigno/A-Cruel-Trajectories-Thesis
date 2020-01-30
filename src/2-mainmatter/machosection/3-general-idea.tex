@@ -32,7 +32,7 @@ In letteratura è possibile trovare riferimenti ad algoritmi di \textit{colossal
 criteri di pruning basati sulle dimensioni spazio-temporali. Nonostante quindi la letteratura non
 presenti una soluzione adatta, le idee alla base del \textit{colossal itemset mining} risultano sicuramente interessanti.
 
-Parlando poi di clustering di traiettorie, rispetto a quanto trattato nella nella~\cref{subsec:trajectoryclustering-problem}, è possibile aggiungere un'ulteriore divisione:
+Parlando poi di clustering di traiettorie, rispetto a quanto trattato nella nella~\cref{subsec:problem:trajectoryclustering}, è possibile aggiungere un'ulteriore divisione:
 si definisce il clustering partizionante se ogni punto appartiene a un solo cluster, sovrapposto in caso contrario.
 Applicando questo principio di classificazione agli algoritmi basati su traiettorie, gli algoritmi partizionanti considereranno la traiettoria nella sua interezza,
 assegnandola quindi ad un solo cluster. Questa tipologia di clustering comporta però la perdita di informazioni tra i diversi cluster:
@@ -44,7 +44,7 @@ in sotto-traiettorie e effettuano un clustering partizionante su queste sotto-tr
 Questa soluzione permette di conservare le relazioni intra-cluster, tuttavia una frammentazione troppo fine può causare
 la perdita di \textit{rare pattern}, ad esempio eventi significanti che accadono con una bassa frequenza~\cite{DBLP:journals/tkdd/KohR16, DBLP:journals/geoinformatica/HuangPX06}.
 
-Come già detto nella~\cref{subsec:trajectoryclustering-problem}, il clustering classico non esprime vincoli temporali o ulteriori parametri adatti alla ricerca di traiettorie.
+Come già detto nella~\cref{subsec:problem:trajectoryclustering}, il clustering classico non esprime vincoli temporali o ulteriori parametri adatti alla ricerca di traiettorie.
 Per aggiungere la possibilità di esprimere vincoli sul tempo, sono stati introdotto i \textit{co-movement} patterns descritti nella~\cref{sec:comovements-pattern}; algoritmi come \textit{G.C.M.P},
 (~\cref{chapter:chapter2}), \textit{GeT Move}~\cite{DBLP:journals/ijitdm/PhanPT16} e  implementa la ricerca di questi pattern mischiando l'approccio basato su \textit{frequent itemset mining} e il clustering.
 Entrambi questi framework discretizzano il tempo in bucket di dimensione finita, su cui poi applicano un clustering basato sulla densità, infine

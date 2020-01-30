@@ -1,0 +1,28 @@
+Prima di concentrarsi sui singoli passi di \textit{Cu.Te}, occorre definire la formulazione dell'algoritmo.
+Innanzitutto si pone necessario riprendere i concetti di itemset, supporto e transazione descritti nella~\cref{sec:frequent-itemset-mining}
+e di traiettoria grezza e astrazione di traiettoria presentati nella~\cref{subsec:problem:trajectorydata}.
+
+A queste definizioni va aggiunto il concetto di sistema di riferimento: si definisce un sistema di riferimento un insieme di
+quanti completo e continuo all'interno di una regione spazio-temporale.
+I sistemi di riferimento sono fondamentali nel determinare le dimensioni spazio-temporali dei punti delle varie traiettorie,
+un esempio su tutti può essere una scala di riferimento espressa in coordinate polari.
+Tuttavia è possibile definire anche sistemi di riferimento che utilizzano metriche diverse dalle coordinate sopracitate,
+ottenendo così diversi effetti sulla rappresentazione dei dati.
+
+Per quanto riguarda invece l'aspetto collegato alla ricerca di itemset,
+in \textit{Cu.Te} viene introdotto il concetto di \textit{Cohesion} o coesione: dato un itemset \textit{I} = \{ \textit{i\textsubscript{1}},\ldots, \textit{i\textsubscript{n}}\}
+avente supporto definito come \textit{s}, si definisca la funzione \textit{allTransaction(i)} %chktex 36
+ che dato un item \textit{i} restituisce l'insieme delle
+transazioni che lo supportano. A questo punto è possibile definire la coesione con la seguente formulazione:
+
+\[ coh(I) = \frac{\lvert \lvert allTransaction(\textit{i\textsubscript{1}})~\cap ,\ldots, \cap~allTransaction(\textit{i\textsubscript{1}}) \rvert\rvert}{\lvert \lvert allTransaction(\textit{i\textsubscript{1}})~\cup ,\ldots, \cup~allTransaction(\textit{i\textsubscript{1}}) \rvert\rvert} \]
+
+Considerando che il numeratore corrisponde esattamente a \textit{s}, allora è possibile esprimere l'equazione come:
+
+\[ coh(I) = \frac{s}{\lvert \lvert allTransaction(\textit{i\textsubscript{1}})~\cup ,\ldots, \cup~allTransaction(\textit{i\textsubscript{1}}) \rvert\rvert} \]
+
+La nuova misura permette di misurare la compattezza di un itemset rispetto agli elementi che lo compongono.
+La coesione si pone quindi come meccanica di filtraggio aggiuntiva al supporto:
+mentre quest'ultimo è una misura in termini assoluti di frequenza, la coesione risulta una metrica relativa alla frequenza dei singoli elementi.
+Ne segue che un alto valore di coesione andrà a scartare quegli itemset i cui item risultano molto sparsi all'interno delle transazioni,
+mantenendo invece quelli che risultano più compatti.
