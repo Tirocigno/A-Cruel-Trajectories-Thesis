@@ -15,14 +15,47 @@ avente supporto definito come \textit{s}, si definisca la funzione \textit{allTr
  che dato un item \textit{i} restituisce l'insieme delle
 transazioni che lo supportano. A questo punto è possibile definire la coesione con la seguente formulazione:
 
-\[ coh(I) = \frac{\lvert \lvert allTransaction(\textit{i\textsubscript{1}})~\cap ,\ldots, \cap~allTransaction(\textit{i\textsubscript{1}}) \rvert\rvert}{\lvert \lvert allTransaction(\textit{i\textsubscript{1}})~\cup ,\ldots, \cup~allTransaction(\textit{i\textsubscript{1}}) \rvert\rvert} \]
+\[ coh(I) = \frac{\lvert \lvert allTransaction(\textit{i\textsubscript{1}})~\cap ,\ldots, \cap~allTransaction(\textit{i\textsubscript{n}}) \rvert\rvert}{\lvert \lvert allTransaction(\textit{i\textsubscript{1}})~\cup ,\ldots, \cup~allTransaction(\textit{i\textsubscript{n}}) \rvert\rvert} \]
 
 Considerando che il numeratore corrisponde esattamente a \textit{s}, allora è possibile esprimere l'equazione come:
 
-\[ coh(I) = \frac{s}{\lvert \lvert allTransaction(\textit{i\textsubscript{1}})~\cup ,\ldots, \cup~allTransaction(\textit{i\textsubscript{1}}) \rvert\rvert} \]
+\[ coh(I) = \frac{s}{\lvert \lvert allTransaction(\textit{i\textsubscript{1}})~\cup ,\ldots, \cup~allTransaction(\textit{i\textsubscript{n}}) \rvert\rvert} \]
 
 La nuova misura permette di misurare la compattezza di un itemset rispetto agli elementi che lo compongono.
 La coesione si pone quindi come meccanica di filtraggio aggiuntiva al supporto:
 mentre quest'ultimo è una misura in termini assoluti di frequenza, la coesione risulta una metrica relativa alla frequenza dei singoli elementi.
 Ne segue che un alto valore di coesione andrà a scartare quegli itemset i cui item risultano molto sparsi all'interno delle transazioni,
 mantenendo invece quelli che risultano più compatti.
+
+Una volta definiti questi due concetti, è opportuno elencare e definire i parametri
+utilizzati da \textit{Cu.Te}.
+
+\begin{itemize}
+
+  \item Quanto spaziale \textit{s}:
+  Definisce la dimemsione spaziale del sistema di riferimento, in relazione alle coordinate polari di ogni punto.
+
+  \item Quanto temporale \textit{t}:
+  Definisce la dimensione temporale del sistema di riferimento rispetto al tempo misurato in secondi di ogni punto di una traiettoria.
+  \item Soglia di distanza spaziale\(~\epsilon \):
+  Dati due punti \textit{p\textsubscript{1}, p\textsubscript{2}} e una funzione di distanza spaziale \textit{d\textsubscript{s}},
+  si definisce \(~\epsilon \) come la soglia sotto la quale due punti si considerano vicini.
+  \item Soglia di distanza temporale\(~\tau \): analogamente a quanto detto sopra, il parametro \(~\tau \) permette di specificare
+  una soglia massima per la distanza tra due punti nel tempo.
+  \item Dimensione minima\(~\gamma \): Questo parametro riguarda il numero minimo di item all'interno di ogni itemset restituito in output alla fine dell'algoritmo.
+  \item Supporto minimo\(~\alpha \): La frequenza minima oltre cui ogni itemset deve apparire all'interno dell'insieme delle transazioni.
+  \item Coesione minima\(~\beta \): Come definito sopra, esprime un limite inferiore alla coesione degli itemset prodotti dall'algoritmo.
+
+\end{itemize}
+
+Grazie a questi parametri, risulta possibile per \textit{Cu.Te} affrontare il problema
+della ricerca di \textit{comovement-pattern}, descritto nella \cref{sec:comovements-pattern}.
+Scendendo nel dettaglio, \(~\gamma \) esprime la dimensione minima di un gruppo considerato interessante, mentre
+\(~\alpha \) il numero minimo di istanti spazio-temporali in cui tutti i membri del gruppo sono considerati vicini.
+\(~\epsilon \) rappresenta il criterio di vicinanza spaziale tra due punti, \(~\tau \) invece permette la ricerca dei diversi pattern di movimento:
+con \(~\tau \) = 1 si ha un vincolo stringente sulla continuità temporale, andando quindi a ricercare pattern \textit{flock},
+dall'altra parte con un valore uguale a \(~\infty \), si rilassa al massimo la continuità temporale, ottenendo
+così dei risultati classificabili come \textit{Swarm}. Infine con qualunque valore intermedio tra 1 e  \(~\infty \),
+\textit{Cu.Te} esegue la ricerca di pattern \textit{Group} degeneri, ovvero con vincolo \textit{L} posto uguale a 1.
+
+
