@@ -1,0 +1,23 @@
+Nella prima fase viene prodotto un dataset nella forma \textit{<t\textsubscript{i}, (c\textsubscript{1},\ldots,c\textsubscript{n})>},
+dove \textit{t\textsubscript{i}} rappresenta l'id di una certa traiettoria, mentre \textit{c\textsubscript{1},\ldots,c\textsubscript{n}}
+l'insieme di celle in cui tale percorso è stato convertito.
+Questo dataset tuttavia non è ancora adatto ad essere sottoposto a mining, poiché in questa situazione l'insieme delle transazioni è composto dalle traiettorie,
+mentre quello delle feature dalle celle.
+Un'operazione di ricerca di regole associative va ad individuare tra le feature quelle che compaiono assieme con almeno una certa frequenza,ù
+quindi in questo caso il risultato dell'algoritmo sarebbe varii raggruppamenti di celle.
+Questi insiemi possono essere sicuramente utili ad individuare percorsi frequenti e trafficati, ma non sono in grado di descrivere gruppi di movimenti comuni ad un certo insieme di oggetti.
+
+Scopo di questo secondo passo di \textit{Cu.te} è quindi modificare il dataset ottenuto dalla prima fase
+in modo da renderlo valido per la ricerca di pattern di movimento.
+Per realizzare questa trasformazione, occorre invertire il ruolo di celle e traiettorie all'interno del dataset: prendendo come
+ipotesi di invertire la relazione tra traiettoria e insieme di celle che la compongono, si ottiene la versione trasposta del dataset originale.
+La versione invertita del database sarà quindi composta dalle singole celle del problema che ora saranno identificate
+come le transazioni, mentre le traiettorie saranno le nuove feature. Così facendo ad ogni cella sarà associato l'insieme delle traiettorie di cui
+fa parte.
+In questa situazione la ricerca di itemset frequenti produce raggruppamenti di traiettorie che hanno una frequenza maggiore
+a una certa soglia di supporto.
+Tale soglia può essere interpretata come il numero minimo di celle, ovvero di istanti spazio-temporali, che
+l'intero gruppo di traiettorie deve aver condivisio per essere considerato interessante.
+Alla luce di questa interpreatzione, diviene chiaro che questo vincolo svolge la stessa identica funzione del parametro \textit{k} definito nella sezione
+~\cref{sec:comovements-pattern}
+
