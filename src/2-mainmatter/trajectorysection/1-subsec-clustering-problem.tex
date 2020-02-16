@@ -19,6 +19,7 @@ Questo metodo ha come vantaggio la semplicità e il ridotto numero di iperparame
 Due esempi di algoritmi~\cite{arora2016analysis} possono essere \textit{k-means} e \textit{k-medioid}:
 entrambi partono dall'individuare \textit{k} punti a caso all'interno del dataset, successivamente eseguire l'assegnazione dei restanti elementi,
 ricalcolare il centro del cluster in un caso, il medioide nell'altro e riperetere le operazioni fino a giungere a una convergenza ai centri dei cluster.
+In figura~\cref{fig:chap-1:k-means-overview} è presentato un'esempio di esecuzione di \textit{k-means}.
 I limiti di questo approccio sono l'eccessiva rigidità delle regole applicate nella generazione dei cluster e la necessità di conoscere a prescindere il numero di cluster \textit{k}.
 
 \begin{figure}
@@ -44,9 +45,10 @@ difficile definire corettamente i punti di divisione o aggregazione dei cluster.
 In più la natura irreversibile delle divisoni/aggregazioni rende complicato giungere a soluzione ottime.
 
 La categoria di algoritmi basati sulla densità ha alla base un'idea diversa rispetto a quanto detto fin d'ora.
-Data un'area, la cui densità è sopra una soglia di rilevanza, questa viene attribuita al cluster che è più vicino.
+Data un'area spaziale, la cui densità è sopra una soglia di rilevanza, e un insieme di cluster, intuitivamente questa viene attribuita al cluster più vicino.
 Il clustering basato sulla densità riesce così ad individuare raggruppamenti di ogni forma e dimensione.
 Due tipici algoritmi sono \textit{DBSCAN}\cite{ester1996density} e \textit{OPTICS}\cite{ankerst1999optics}.
+
 \textit{Density-Based Spatial Clustering of Applications with Noise}, o \textit{DBSCAN}, è un algoritmo
 di clustering che permette di individuare cluster di ogni forma e dimensione grazie alla connessione basata sulla densità dei singoli cluster.
 Dato un set di punti, questi vengono divisi in core point, density-reachable point e outlier secondo il seguente criterio:
@@ -59,18 +61,17 @@ Un punto \textit{q} è definito raggiungibile da \textit{p} se esiste un'insieme
 Un punto non raggiungibile da nessun'altro viene definito outlier.
 In~\cref*{fig:chap-1:dbscan-points} è possibile vedere una classificazione di punti su un dataset fissato
 \(minPts=3\): il punto A è un core points, B e C sono density-reachable da A mentre N è un outlier.
-
-\begin{figure}
-  \centering
-  \includegraphics[scale=.1]{/sec-1/400px-DBSCAN-Illustration.pdf}
-  \caption{Divisione dei punti di un dataset eseguita da DBSCAN: core points~(in rosso), density-reachable points~(in giallo), outlier~(in blu),Fonte:~\url{https://it.wikipedia.org/wiki/Dbscan\#/media/File:DBSCAN-Illustration.svg}}%
-  \label{fig:chap-1:dbscan-points}
-\end{figure}
-
 Se \textit{p} è un core point, allora genera un cluster assieme a tutti i punto raggiungibili.
 Tutti i punti all'interno di un cluster devono mantenere una densità di almeno \textit{minPts} punti all'
 interno del proprio vicinato di raggio \(~\epsilon \).
 I valori dei parametri \(~\epsilon \) e \textit{minPts} sono decisi senza una regola precisa, sta infatti all'esperienza dell'utente stabilire valori sensati e in questo risiede la maggiore debolezza di DBSCAN\@.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=.1]{/sec-1/400px-DBSCAN-Illustration.pdf}
+  \caption{Divisione dei punti di un dataset eseguita da DBSCAN\@: core points~(in rosso), density-reachable points~(in giallo), outlier~(in blu),Fonte:~\url{https://it.wikipedia.org/wiki/Dbscan\#/media/File:DBSCAN-Illustration.svg}}%
+  \label{fig:chap-1:dbscan-points}
+\end{figure}
 
 Approccio ancora differente è quello dei metodi basati su griglia, che impiegano una griglia multi-risoluzione
 per suddividere lo spazio in un limitato numero di celle.
@@ -84,7 +85,7 @@ in strutture a minore dimensionalità, conservando per ciascun livello un insiem
 Ultima famiglia di algoritmi tratatta è quella degli algoritmi basati su modello. Questi assumono
 che per ogni cluster sia presente un modello che lo descriva e ricercano l'insieme dei punti che meglio di adattano
 al modello selezionato. In primo luogo vengono calcolate le funzioni di densità che riflettono la distribuzione dei dati,
-successivamente tenta di adattare l'adattabilità tra i dati e un certo modello matematico. \textit{COBWEB}\cite{fisher1987knowledge} è
+successivamente tenta di adattare la distribuzione dei dati a un certo modello matematico. \textit{COBWEB}\cite{fisher1987knowledge} è
 un esempio di algoritmo che ricerca raggruppamenti sui dati tramite una gerarchia di concetti.
 Il clustering basato su modelli molto spesso fatica nel trovare la descrizione migliore per le relazioni tra i diversi punti del dataset.
 
