@@ -1,0 +1,35 @@
+Il clustering di traiettorie è uno degli argomenti più discussi all'interno del mining di traiettorie, che mira
+a individuare le similarità tra i movimenti dei vari oggetti e dedurre comportamenti comuni sulla
+base di una divisione in cluster.
+
+Come detto nella~\cref*{subsec:problem:trajectorydata}, i dati di traiettoria sono molto più complessi
+rispetto ai dati solitamente utilizzati con gli algoritmi presentati nella~\cref*{subsec:problem:clustering}.
+Occorre quindi definire modifiche degli algoritmi presenti in letteratura per risucire a fare operazioni di clustering
+efficienti, in quanto sarebbe impossibile catturare tutta la complessità dell'informazione con
+tecniche pensate per dati a bassa dimensionalità.
+
+Alla luce di quanto detto sopra, per il clustering di traiettorie sono individuabili i seguenti obbiettivi:
+
+\begin{itemize}
+
+  \item Supporto alla dimensionalità dei dati.
+  Obbiettivo del clustering di traiettorie è la definizione di cluster tenendo conto di tutte le informazioni presenti sui dati.
+  Ognuno di questi attributi dovrà essere considerato nel momento in cui verranno portate avanti le operazioni di divisione e raggruppamento delle traiettorie.
+
+  \item Definizione di una maetrica di similarità tra traiettorie.
+  Come presentato nella~\cref{subsec:problem:trajectorydata} il problema della similarità tra traiettorie è complesso e sono presenti diverse soluzioni.
+  Scopo della ricerca è quello di individuare metriche che individuino le differenze tra le traiettorie in maniera affidabile e efficace.
+
+  \item Qualità dell'algoritmo.
+  L'algortimo utilizzato nelle operazioni di clustering deve essere efficiente e scalabile, ad esempio impiegando apposite strutture dati per
+  ridurre i tempi di accesso ai dati, oppure utilizzando le tecnologie di computazione Big Data per velocizzare l'esecuzione degli algoritmi.
+
+\end{itemize}
+
+Nonostante nessuno degli algoritmi di clustering tradizionali abbia tutte le caratteristiche espresse sopra, le idee alla loro base rimangono comunque
+valide in buona parte dei casi.
+Di conseguenza molti algoritmi pensati per i dati di traiettoria non sono che estensioni di quelli già noti in letteratura.
+
+Analizzando il panorama dei possibili algoritmi di clustering di traiettorie, si possono individuare alcune famiglie sulla base delle caratteristiche a cui
+viene dato maggior peso: gli algoritmi spaziali, quelli temporali, il clustering basato sul partizionamento, il clustering di traiettorie incerte e infine algoritmi
+basati su un raggruppamento di natura semantica
