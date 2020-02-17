@@ -20,7 +20,7 @@ e del \textit{colossal itemset mining}.
 
 
 Il \textit{colossal itemset mining} si pone come un'estensione del \textit{frequent itemset mining}
-presentato nella~\cref{sec:frequent-itemset-mining}. Questa espansione riguarda l'utilizzo di dati
+presentato nella~\cref{sec:problem:frequent-itemset-mining}. Questa espansione riguarda l'utilizzo di dati
 a elevata dimensionalità~\cite{zhu2007mining}, in alcuni domini è possibile infatti che il numero di attributi per ogni dato sia di molto superiore al numero stesso di dati.
 Tale prospettiva può essere impiegata anche nell'analisi di dati di traiettoria. Considerando la superfice
 spazio-temporale coperta dall'insieme delle traiettorie e il numero di queste ultime, nella maggior parte dei casi risulterà evidente
@@ -45,7 +45,7 @@ Questa soluzione permette di conservare le relazioni intra-cluster, tuttavia una
 la perdita di \textit{rare pattern}, ad esempio eventi significanti che accadono con una bassa frequenza~\cite{DBLP:journals/tkdd/KohR16, DBLP:journals/geoinformatica/HuangPX06}.
 
 Come già detto nella~\cref{sec:problem:trajectoryclustering}, il clustering classico non esprime vincoli temporali o ulteriori parametri adatti alla ricerca di traiettorie.
-Per aggiungere la possibilità di esprimere vincoli sul tempo, sono stati introdotto i \textit{co-movement} patterns descritti nella~\cref{sec:comovements-pattern}; algoritmi come \textit{G.C.M.P},
+Per aggiungere la possibilità di esprimere vincoli sul tempo, sono stati introdotto i \textit{co-movement} patterns descritti nella~\cref{sec:problem:comovements-pattern}; algoritmi come \textit{G.C.M.P},
 (~\cref{chapter:chapter2}), \textit{GeT Move}~\cite{DBLP:journals/ijitdm/PhanPT16} e  implementa la ricerca di questi pattern mischiando l'approccio basato su \textit{frequent itemset mining} e il clustering.
 Entrambi questi framework discretizzano il tempo in bucket di dimensione finita, su cui poi applicano un clustering basato sulla densità, infine
 ricercano pattern di movimento fondendo i vari cluster ottenuti nei differenti istanti temporali.
