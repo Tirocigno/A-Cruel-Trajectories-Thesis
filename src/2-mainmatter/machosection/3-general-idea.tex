@@ -16,16 +16,10 @@ Lo scopo di \textit{Cu.Te} è dunque di estrarre i pattern di movimento che avve
 L'algoritmo \textit{Cu.Te} è etichettabile come algoritmo di \textit{colossal trajectory mining}.
 L'idea alla base del \textit{colossal trajectory mining},
 o mining di traiettorie su larga scala, interseca entrambi gli ambiti del clustering di traiettorie
-e del \textit{colossal itemset mining}.
-
-
-Il \textit{colossal itemset mining} si pone come un'estensione del \textit{frequent itemset mining}
-presentato nella~\cref{sec:problem:frequent-itemset-mining}. Questa espansione riguarda l'utilizzo di dati
-a elevata dimensionalità~\cite{zhu2007mining}, in alcuni domini è possibile infatti che il numero di attributi per ogni dato sia di molto superiore al numero stesso di dati.
-Tale prospettiva può essere impiegata anche nell'analisi di dati di traiettoria. Considerando la superfice
+e del colossal itemset mining (~\cref{subsec:problem:cim}).
+La prospettiva del mining di itemset ad alta dimensionalità può essere impiegata anche nell'analisi di dati di traiettoria. Considerando la superfice
 spazio-temporale coperta dall'insieme delle traiettorie e il numero di queste ultime, nella maggior parte dei casi risulterà evidente
 che la dimensionalità di quest'ultimo dato sarà maggiore del precedente.
-
 Risulta quindi possibile applicare algoritmi di mining di itemset su larga scala a dati di traiettoria.
 In letteratura è possibile trovare riferimenti ad algoritmi di \textit{colossal itemset mining}~\cite{DBLP:journals/bdr/ApilettiBCGPM17, DBLP:conf/kdd/PanCTYZ03}
 , tuttavia nessuno di questi è adatto alla ricerca di pattern di movimento, anche per la mancanza di

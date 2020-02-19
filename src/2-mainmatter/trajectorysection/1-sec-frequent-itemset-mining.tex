@@ -1,0 +1,37 @@
+Nell'ambito dell'analisi dei dati, il \textit{frequent itemset mining}, o ricerca di itemset frequenti,
+è uno dei task con maggiori ambiti di applicazione: può essere impiegato nei processi di classificazione,
+clustering o ricerca di outlier~\cite{article}.
+
+Il frequent itemset mining necessita di un insieme di transazioni per effettuare la propria ricerca,
+ogni transazione, o riga (\textit{row}) che dir si voglia, è composta poi da un insieme di attributi,
+o \text{feature}, che identificano gli elementi all'interno della singola transazione.
+Occorre specificare che di una feature è considerata rilevante ai fini della ricerca solo la presenza
+o l'assenza e non un eventuale valore o altre prorietà collegate; queste potranno essere integrate
+mediante apposite tecniche di preprocessing.
+
+Scopo del mining di itemset frequenti è di ricercare, dato un insieme di transazioni, ricercare
+le combinazioni di feature, o itemset, che risultano frequenti.
+Misura fondamentale per definire la frequenza è il supporto: tale metrica può essere
+descritta come il numero di transazioni che contengono un certo itemset.
+All'interno della ricerca di itemset frequenti viene definito un limite inferiore al supporto
+per determinare l'interesse verso un certo itemset; questo parametro prende il nome
+di supporto minimo, o \textit{minsup}.
+Definito ciò, è possibile esprimere il problema del mining di itemset frequenti con
+la seguente formulazione (~\cref{definition:fim}) :
+
+\begin{definition}[Frequent itemset mining]\label{definition:fim}
+  Definito \(T\) come l'insieme delle transazioni e \(F\) come quello delle feature complessive,
+  il frequent itemset mining ricerca tutti gli itemset \( i = \{ f_{1}, \ldots, f_{n}\}, f_{1}, \ldots, f_{n} \in F\)
+  tali che definito il supporto \( S = \{ t_{1}, \ldots, t_{m} \} \in T \; s.t \; \forall t_{i} \in \{ t_{1}, \ldots, t_{m} \}
+  i \subseteq t_{i}  \), \(|S| \geq minsup\)
+\end{definition}
+
+Definito l'obbiettivo della ricerca, sono necessari due passaggi per realizzarla:
+il primo passo consiste nella generazione di tutti i possibili itemset, il secondo
+nel calcolo del supporto per ciascuno di questi e \textit{pruning} (potatura) dei candidati
+non interessanti.
+Nonostante la definizione semplice, la complessità computazionale di queste fasi può esplodere:
+supponendo infatti di avere un set di feature contenente \(n\) diversi elementi, l'insieme di tutte
+le possibili combinazioni generabili è \(2^n\), rendendo di fatto molto costoso il processo
+di ricerca in presenza di dataset di larghe dimensioni.
+
