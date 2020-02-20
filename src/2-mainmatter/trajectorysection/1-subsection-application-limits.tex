@@ -10,30 +10,30 @@ Di seguito sono riportati i principali ambiti applicativi del clustering di trai
   movimento mira ad individuare quali oggetti si sono mossi assieme secondo certe regole.
 
   \item \textbf{Previsione dei movimenti di un oggetto.}
-  Sulla base delle caratteristiche di una traiettoria, è possibile predirre quali saranno
+  Sulla base delle caratteristiche di una traiettoria, è possibile predire quali saranno
   i futuri movimenti di un oggetto partendo dai suoi spostamenti passati: si attribuisce infatti
-  il percorso fin d'ora eseguito a uno dei cluster individuati e considerando le sue proprietà
-  si può predirre con una certa accuratezza il percorso futuro dell'oggetto.
+  il percorso fin d'ora eseguito a uno dei cluster individuati e considerando le sue caratteristiche
+  si può prevedere con una certa accuratezza il percorso futuro dell'oggetto.
   La validità di questa previsione è direttamente collegata al numero di misure considerate durante
   le operazioni di clustering: maggiore il numero, più accurato il risultato.
   Importanza particolare ha il tempo: non considerandolo è di fatto impossibile eseguire questo tipo
   di ricerca.
 
   \item \textbf{Supporto alla pianificazione stradale e dei trasporti.}
-  Come affermato nella~\cref*{subsec:problem:spatialalgorithms}, determinati algoritmi
+  Come affermato nella~\cref{subsec:problem:spatialalgorithms}, determinati algoritmi
   possono individuare i punti più frequentati da certi utenti; è quindi possibile integrare queste
   informazioni in piani di controllo del traffico/ espansione delle infrastrutture urbane.
 
-  \item \textbf{Ricerca di Outlier.}
+  \item \textbf{Ricerca di outlier.}
   Un outlier è per definizione un elemento che, dato un certo criterio di similarità,
   si discosta da tutti gli altri. Gli outlier possono essere interpretati come errori, ma anche
   come comportamenti che per determinati motivi divergono dalla norma.
   Sotto quest'ultima chiave di lettura divengono interessanti la loro ricerca e i motivi per cui
-  differiscono dagli altri dati nel dataset.
-  Essendo poi il percoso di un oggetto interpretabile come l'insieme dei suoi comportamenti,
+  differiscono dagli altri dati.
+  Essendo poi il percorso di un oggetto interpretabile come l'insieme dei suoi comportamenti,
   gli outlier individuano comportamenti inusuali e per questo possono destare grande interesse.
 
-  \item \textbf{De-Anonimizzazione dei dati.}
+  \item \textbf{Deanonimizzazione dei dati.}
   Utilizzando tecniche di clustering su dati incerti, è possibile ricavare informazioni sugli
   oggetti collegati alle traiettorie precedentemente nascosti tramite tecniche di anonimizzazione.
 
@@ -44,13 +44,14 @@ Gli ambiti di utilizzo del clustering di traiettorie sono numerosi, tuttavia il 
 In primo luogo la maggior parte degli algoritmi non sfrutta tutto il potenziale semantico dei dati:
 molte tecniche impiegano solo le dimensioni spazio-temporali o un insieme ristretto di feature,
 scartando così informazioni che potrebbero ulteriormente migliorare la qualità dei risultati.
-Successivamente i risultati prodotti sono di difficile intrepretazione, molto spesso accade che
+Successivamente i risultati prodotti sono di difficile interpretazione, molto spesso accade che
 l'estrazione di conoscenza mostri relazioni banali o al contrario troppo complesse per essere spiegate.
-Infine manca ancora un'integrazione diffusa con le tecnologie di elaborazione Big Data:
+Infine manca ancora un'integrazione diffusa con le tecnologie di elaborazione Big Data,
 la maggior parte degli algoritmi infatti è pensata per computare in maniera centralizzata, rinunciando
-ai vantaggi del calcolo distribuito. In questo modo larghi dataset producono risultati di scarsa
+ai vantaggi del calcolo distribuito.
+In questo modo larghi dataset producono risultati di scarsa
 qualità in tempi alti.
-L'applicazione di queste strategie di computazione, sebbene complessa nella sua realizzaione, porterebbe
+L'applicazione di queste strategie di computazione, sebbene complessa nella sua realizzazione, porterebbe
 notevoli vantaggi e supererebbe molte delle problematiche degli attuali algoritmi.
 I framework \textit{G.C.M.P}\cite{DBLP:journals/pvldb/FanZWT16} e \textit{C.U.T.E} pongono questo
 supporto come uno dei loro punti di forza.

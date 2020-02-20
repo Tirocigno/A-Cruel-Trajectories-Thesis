@@ -6,7 +6,7 @@ Il frequent itemset mining necessita di un insieme di transazioni per effettuare
 ogni transazione, o riga (\textit{row}) che dir si voglia, è composta poi da un insieme di attributi,
 o \text{feature}, che identificano gli elementi all'interno della singola transazione.
 Occorre specificare che di una feature è considerata rilevante ai fini della ricerca solo la presenza
-o l'assenza e non un eventuale valore o altre prorietà collegate; queste potranno essere integrate
+o l'assenza e non un eventuale valore o altre proprietà collegate; queste potranno essere integrate
 mediante apposite tecniche di preprocessing.
 
 Scopo del mining di itemset frequenti è di ricercare, dato un insieme di transazioni, ricercare
@@ -19,9 +19,10 @@ di supporto minimo, o \textit{minsup}.
 Definito ciò, è possibile esprimere il problema del mining di itemset frequenti con
 la seguente formulazione (~\cref{definition:fim}) :
 
-\begin{definition}[Frequent itemset mining]\label{definition:fim}
+\begin{definition}[Frequent Itemset Mining]\label{definition:fim}
   Definito \(T\) come l'insieme delle transazioni e \(F\) come quello delle feature complessive,
-  il frequent itemset mining ricerca tutti gli itemset \( i = \{ f_{1}, \ldots, f_{n}\}, f_{1}, \ldots, f_{n} \in F\)
+  il frequent itemset mining ricerca tutti gli itemset \\
+  \( i = \{ f_{1}, \ldots, f_{n}\}, f_{1}, \ldots, f_{n} \in F\)
   tali che definito il supporto \( S = \{ t_{1}, \ldots, t_{m} \} \in T \; s.t \; \forall t_{i} \in \{ t_{1}, \ldots, t_{m} \}
   i \subseteq t_{i}  \), \(|S| \geq minsup\)
 \end{definition}
@@ -34,4 +35,3 @@ Nonostante la definizione semplice, la complessità computazionale di queste fas
 supponendo infatti di avere un set di feature contenente \(n\) diversi elementi, l'insieme di tutte
 le possibili combinazioni generabili è \(2^n\), rendendo di fatto molto costoso il processo
 di ricerca in presenza di dataset di larghe dimensioni.
-

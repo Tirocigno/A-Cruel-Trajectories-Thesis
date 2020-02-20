@@ -1,19 +1,19 @@
 Nelle sezioni precedenti sono stati analizzati i dati di traiettoria sotto il profilo
-spaziale e temporale, tuttavia sarebbe inesatto limitare la panoramica sul clustering di traiettorie
+spaziale e temporale, tuttavia sarebbe incompleto limitare la panoramica sul clustering di traiettorie
 a queste due categorie.
 Lo spazio-tempo sono indubbiamente le dimensioni più importanti all'interno di una traiettoria,
-tuttavia come affermato nella~\cref{subsec:problem:trajectorydata},
+tuttavia, come affermato nella~\cref{subsec:problem:trajectorydata},
 i dati che costituiscono quest'ultima hanno molte più dimensioni di quelle fin d'ora considerate.
 
 Partendo da questo punto, sono state ideate altre categorie di clustering e raggruppamento dei dati
 che sfruttano parte di queste informazioni in combinazione con gli attributi spazio-temporali,
-che mantengono comunque un ruolo cruciale nella divisione delle traiettorie.
+i quali mantengono comunque un ruolo cruciale nella divisione delle traiettorie.
 
 Una traiettoria è spesso composta da un grande numero di punti e processata nella sua completezza.
-Questo però comporta che molti algoritmi tendano a ignorare caratteristiche locali delle traiettorie
+Questo però comporta che molti algoritmi tendano a ignorare caratteristiche locali
 e di conseguenza mancare il riconoscimento di similarità tra diverse sotto-traiettorie.
-Per risolvere questo problema, sono stati ideati algoritmi per scomporre le traiettorie in segmenti più corti
-e eseguire operazioni di clustering utilizzando queste sotto-traiettorie.
+Per risolvere questo problema, sono stati ideate tecniche per scomporre le traiettorie in segmenti più corti
+e eseguire operazioni di clustering utilizzando le sotto-traiettorie così individuate.
 Questa scomposizione non rende solo più agevoli le operazioni di clustering, ma cattura anche
 quelle particolarità che sarebbero scartate processando le traiettorie nella loro interezza.
 Gli algoritmi basati su questa idea sono definiti \textit{Partition and group based algorithm}.
@@ -32,7 +32,7 @@ Una traiettoria per definizione è composta da un insieme limitato di punti, tal
 il moto in questione.
 Nel caso in cui questa frequenza sia particolarmente alta, può succedere che si venga a creare
 un certo grado di incertezza all'interno della traiettoria stessa: dati due punti consecutivi
-\(p_{1}\) e \(p_{2}\) registrati agli istanti \(t_{1}\) e \(t_{2}\), non c'è modo di sapere quali
+\(p_{1}\) e \(p_{2}\) registrati agli istanti \(t_{1}\) e \(t_{2}\), non c'è modo di sapere con certezza quali
 movimenti abbia eseguito l'oggetto tra  \(t_{1}\) e \(t_{2}\).
 Questa mancanza di informazioni ha dato origine a una categoria di algoritmi,
 chiamati \textit{Uncertain Trajectory Clustering algorithm}, con lo scopo direttamente
@@ -40,22 +40,22 @@ creare cluster tenendo conto di questa variabilità nel singolo dato.
 L'introduzione dell'incertezza all'interno di questi framework consente loro di poter
 processare anche dataset in cui sono presenti numerosi outlier e i dati in generale
 hanno molto rumore.
-Un altra applicazione di questa categoria è nella deanonimizzazione dei dati: grazie
+Un' altra applicazione di questa categoria è nella deanonimizzazione dei dati: grazie
 alla ricerca di cluster incerti è possibile invertire in parte il processo di anonimizzazione
-dei dati all'interno di un dataset e dedurre così informazioni nascoste dal dataset, come
+dei dati all'interno di un dataset e dedurre così informazioni nascoste, come
 ad esempio il gruppo di appartenenza di un certo oggetto sulla base dei suoi movimenti.
 
 Nessuno degli approcci fino ad ora trattati ha posto la propria attenzione sulle informazioni non
-strettamente spazio-temporali, come ad esempio la misura della velocità o accellerazione di un oggetto
+strettamente spazio-temporali, come ad esempio la misura della velocità di un oggetto
 o la direzione del suo movimento.
 Gli algoritmi basati sulla semantica mettono in primo piano queste informazioni rispetto a quelle
-spazio-temporali, ottenendo risultati altrimenti impossibili da ottenere.
-Ad esempio considerando velocità e accellerazione è possibile determinare quali possano
+spazio-temporali, ottenendo risultati altrimenti impossibili da raggiungere.
+Ad esempio considerando velocità e accelerazione è possibile determinare quali possano
 essere i punti in cui una certa categoria di utenti tende a fermarsi più spesso~\cite{zheng2008understanding},
 oppure capire quale sarà il percorso di un utente assegnato a una certa categoria sulla base
-di come si sono mossi gli altri apparteneti al medesimo gruppo~\cite{ying2011semantic}.
+di come si sono mossi gli altri appartenenti al medesimo gruppo~\cite{ying2011semantic}.
 Questa categoria è in continua crescita, con algoritmi sempre più complessi e che sfruttano sempre di
-più l'interzza dell'informazione offerta dal singolo dato.
+più l'interezza dell'informazione offerta dal singolo dato.
 
 
 

@@ -1,36 +1,34 @@
 Le informazioni spaziali sono probabilmente la feature più importanti all'interno di un dato di traiettoria.
-Analizzando come un oggetto si muove e i luoghi che visita, possono essere ricavate una vasta serie di informazioni.
-Negli anni vari algoritmi sono stati proposti per estrarre dai dati informazioni di nature differenti tra loro.
+Analizzando come un oggetto si muove e i luoghi che visita possono essere ricavate una vasta serie di informazioni.
+Negli anni vari algoritmi sono stati proposti per estrarre dai dati informazioni differenti tra loro.
 
 Il primo ambito di ricerca sui dati spaziali riguarda i luoghi di maggior interesse, ovvero le posizioni
 in cui sono passati un certo numero di oggetti all'interno del dataset.
 Il framework \textit{CB-SMoT} (Clusteing Based Stop and Moves of Trajectories)~\cite{palma2008clustering} esegue questa
-ricerca considerando per ogni traiettoria l'insieme dei movimenti (\textit{moves}) e degli stop, tali
+ricerca considerando per ogni traiettoria l'insieme dei movimenti (\textit{moves}) e degli stop. Tali
 caratteristiche sono estratte usando una versione modificata di DBSCAN\@.
 
-Succesivamente è possibile analizzare traiettorie generate da movimenti esclusivamente di esseri umani,
-tale analisi consente di individuare comportamenti comuni e suddividere ad esempio un insieme di
-utenti sulla base dei loro comportamenti.
+Successivamente è possibile analizzare traiettorie generate da movimenti esclusivamente di esseri umani.
+Questa analisi consente di individuare comportamenti comuni e suddividere ad esempio un insieme di
+utenti sulla base delle loro azioni.
 Un algoritmo esemplificativo è proposto dagli autori Tsumoto and Hirano~\cite{tsumoto2009behavior}.
 
-Un altro ambito è quello dei \textit{Comovement Pattern}, ovvero di
+Un altro ambito è quello dei \textit{c-omovement pattern}, ovvero di
 gruppi di oggetti che hanno viaggiato assieme per un certo periodo nello spazio-tempo.
-Diversi framework sono stati sviluppati per riconoscere questi pattern e saranno trattati nello
-specifico in una parte successiva del documento.
 
 Ancora è possibile estrarre da un insieme di dati di traiettorie, l'insieme delle strade più
 frequentate; ciò diverge dal primo ambito presentato poiché la ricerca di un percorso risulta
-più complessa rispetto alla ricerca di un singolo punto: una strada infatti ha caratteristiche molto
+più complessa rispetto a quella di un singolo punto: una strada infatti ha caratteristiche molto
 più complesse di una singola località, come ad esempio una continuità nello spazio tra i vari punti che
 la compongono.
 \textit{CACT}~\cite{hung2015clustering} (Clustering and Aggregating Clues of Trajectories) è un possibile framework per
 ricercare percorsi che rappresentino i comportamenti di una certa categoria di utenti.
 
-Tutti questi ambiti partono dalla stessa intrepretazione dei dati, cercando di eseguire una separazione
+Tutti questi ambiti partono dalla stessa interpretazione dei dati, cercando di eseguire una separazione
 tra le varie traiettorie sulla base delle proprietà dei singoli punti.
-Un alternativa a questa visione è presente nel clustering basato su forma (\textit{Shape Based Clustering}),
+Un' alternativa a questa visione è presente nel clustering basato su forma (\textit{Shape Based Clustering}),
 in cui i raggruppamenti sono basati sulla distribuzione dei punti piuttosto che sulle loro proprietà.
 Questo approccio non si limita ad analizzare solo la dimensione spaziale, ma include nel determinare la
 forma di una traiettoria anche la sua dimensione temporale.
 \textit{PAA} (Piecewise Approximate Aggregate)~\cite{yanagisawa2003shape} e il suo miglioramento~\cite{yanagisawa2006clustering}
-utilizzano la distanza euclidea e DWT per individuare cluster basandosi sulla forma delle singole traiettorie
+utilizzano la distanza euclidea e DWT per individuare cluster basandosi sulla forma delle singole traiettorie.
