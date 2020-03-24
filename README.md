@@ -8,6 +8,8 @@
 
 Template LaTeX per una tesi per l'Università di Bologna, Dipartimento di Informatica - Scienza e Ingegneria.
 
+Tesi sviluppata su overleaf, link al progetto: https://www.overleaf.com/read/pksphwyknhdq
+
 ## BILab Linee guida tesi
 
 0. Consegna dei capitoli
