@@ -1,8 +1,6 @@
-Come detto nella definizione di traiettoria (~\cref*{subsec:problem:trajectorydata})
-i dati necessari per definire un punto sono due: la componente spaziale e quella temporale.
-Se nella~\cref*{subsec:problem:spatialalgorithms} è stata trattata l'analisi delle componenti
-spaziali e le sue potenzialità espressive, questa sezione compirà un' operazione analoga per la
-dimensione temporale.
+
+Come detto nella definizione di traiettoria (\cref{subsec:trajectory-definition})
+le informazioni necessarie per definire un punto sono due: la componente spaziale e quella temporale.
 
 Il tempo risulta più complesso da gestire rispetto allo spazio: è infatti praticamente impossibile
 definire una scala temporale univoca all'interno di un dataset.
@@ -17,7 +15,9 @@ sull'interpretazione del tempo e la conseguente formazione dei cluster piuttosto
 solo su questo secondo ambito.
 
 La maggior parte degli algoritmi riescono a gestire scale temporali assolute. Ad esempio
-\textit{T-OPTICS}~\cite{nanni2006time} è una variante di \textit{OPTICS} che impiega una metrica di similarità
+\textit{T-OPTICS}~\cite{nanni2006time} è una variante di OPTICS che impiega una metrica di similarità
 adatta a individuare cluster considerando anche il tempo.
+L'idea alla base dell'algoritmo è di ricercare il miglior intervallo temporale l'algoritmo OPTICS, appositamente modificato per la ricerca di traiettorie, individua i risultati migliori.
+Sta all'utente specificare la lunghezza e il range dell'intervallo temporale: a seconda del periodo specificato i cluster individuati possono cambiare totalmente.
 Come però affermato in un'indagine~\cite{mitsch2013survey} condotta nel 2013, esistono pochi framework in grado di gestire
 scale temporali cicliche e la ricerca di pattern periodici.

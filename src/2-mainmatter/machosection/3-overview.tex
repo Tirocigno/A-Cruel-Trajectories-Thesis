@@ -1,6 +1,19 @@
-In questo capitolo verrà discusso dell'algoritmo \textit{Cu.Te} e
+Le tecniche presentate nei capitoli precedenti rappresentano lo stato dell'arte per quanto riguarda il clustering di traiettorie.
+In particolare la ricerca dei pattern di movimento presenta un interessante mix tra l'approccio clustering e mining di itemset frequenti.
+Il framework SPARE in particolare implementa la ricerca di pattern di co-movimento generici su piattaforma big data.
+
+Tra le possibilità inesplorate della letteratura ci sono le tecniche di mining ad alta dimensionalità.
+Queste sono state applicate ai dati di traiettoria ma mai per ricercare pattern di co-movimento.
+Per questo scopo è stato realizzato e successivamente adattato l'algoritmo CUTE.
+CUTE consente di ricercare pattern di movimento su un numero custom di dimensioni mediante un approccio di mining ad alta dimensionalità.
+CUTE inoltre è implementato sul framework spark (\cref{sec:bd:spark}).
+
+In questo capitolo sarà presentato prima l'approccio del mining di itemset ad alta dimensionalità applicato ai dati di traiettoria (\textit{Colossal Trajectory Mining}).
+In primo luogo verrà esposto il problema del \textit{Colossal Itemset Mining}, o ricerca di itemset su dati ad alta dimensionalità.
+Successivamente si tratterà dell'algoritmo di Carpenter e delle applicazioni/limiti di questo approccio in letteratura.
+
+Una volta fatto questo, si passerà alla formulazione dell'algoritmo CUTE e
 del contributo apportato da questo nuovo approccio nell'ambito del clustering dei dati di traiettoria.
 
-In primo luogo verranno presentate le esigenze che hanno portato alla stesura dell'algoritmo e delle novità dell'approccio rispetto allo stato dell'arte,
-successivamente saranno presentate l'idea e la realizzazione di \textit{Cu.Te},
-infine saranno formulate alcune considerazione sui punti di forza e limiti di questo nuovo approccio.
+Di CUTE in primo luogo verranno presentate le esigenze che hanno portato alla stesura dell'algoritmo e delle novità dell'approccio rispetto allo stato dell'arte,
+successivamente saranno presentate le fasi dell'algoritmo e i dettagli implementativi.

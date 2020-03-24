@@ -3,16 +3,32 @@ Nell'ambito dell'analisi dei dati, il \textit{frequent itemset mining}, o ricerc
 clustering o ricerca di outlier~\cite{article}.
 
 Il frequent itemset mining necessita di un insieme di transazioni per effettuare la propria ricerca,
-ogni transazione, o riga (\textit{row}) che dir si voglia, è composta poi da un insieme di attributi,
+ogni transazione, o riga (\textit{row}), è composta poi da un insieme di attributi,
 o \text{feature}, che identificano gli elementi all'interno della singola transazione.
 Occorre specificare che di una feature è considerata rilevante ai fini della ricerca solo la presenza
 o l'assenza e non un eventuale valore o altre proprietà collegate; queste potranno essere integrate
 mediante apposite tecniche di preprocessing.
+La definizione di transazione e item è formalizzata nella \cref{definition:transaction-attribute}
+
+\begin{definition}[Transazione, item e itemset]\label{definition:transaction-attribute}
+  Dato un database, si definisce transazione \(t\) la singola riga della base di dati.
+  Tale riga è caratterizzata da un identificatore e da un insieme di item o \(feature\).
+  Un item \(i\), è un attributo binario, calcolato sulle colonne del database da cui sono estratte le transazioni.
+  Si definisce infine un itemset \(I\) un set di item \(i_1, \ldots, i_n\).
+\end{definition}
+
 
 Scopo del mining di itemset frequenti è di ricercare, dato un insieme di transazioni, ricercare
 le combinazioni di feature, o itemset, che risultano frequenti.
 Misura fondamentale per definire la frequenza è il supporto: tale metrica può essere
-descritta come il numero di transazioni che contengono un certo itemset.
+descritta come il numero di transazioni che contengono un certo itemset (\cref{definition:support}).
+
+\begin{definition}[Supporto]\label{definition:support}
+Definito un insieme di transazioni \(T\) e un certo itemset \(I\) si definisce supporto \(s(I)\) l'insieme \((t_1, \ldots, t_n) \in T\) 
+tale che \(I \subseteq t_i.I~\forall t_i \in (t_1, \ldots, t_n)\).
+Il valore del supporto è la cardinalità dell'insieme \((t_1, \ldots, t_n)\)
+\end{definition}
+
 All'interno della ricerca di itemset frequenti viene definito un limite inferiore al supporto
 per determinare l'interesse verso un certo itemset; questo parametro prende il nome
 di supporto minimo, o \textit{minsup}.
@@ -22,9 +38,9 @@ la seguente formulazione (~\cref{definition:fim}) :
 \begin{definition}[Frequent Itemset Mining]\label{definition:fim}
   Definito \(T\) come l'insieme delle transazioni e \(F\) come quello delle feature complessive,
   il frequent itemset mining ricerca tutti gli itemset \\
-  \( i = \{ f_{1}, \ldots, f_{n}\}, f_{1}, \ldots, f_{n} \in F\)
+  \( I = \{ i_{1}, \ldots, i_{n}\}, i_{1}, \ldots, i_{n} \in F\)
   tali che definito il supporto \( S = \{ t_{1}, \ldots, t_{m} \} \in T \; s.t \; \forall t_{i} \in \{ t_{1}, \ldots, t_{m} \}
-  i \subseteq t_{i}  \), \(|S| \geq minsup\)
+  \; i \subseteq t_{i}  \), \(|S| \geq minsup\)
 \end{definition}
 
 Definito l'obbiettivo della ricerca, sono necessari due passaggi per realizzarla:
@@ -35,3 +51,4 @@ Nonostante la definizione semplice, la complessità computazionale di queste fas
 supponendo infatti di avere un set di feature contenente \(n\) diversi elementi, l'insieme di tutte
 le possibili combinazioni generabili è \(2^n\), rendendo di fatto molto costoso il processo
 di ricerca in presenza di dataset di larghe dimensioni.
+

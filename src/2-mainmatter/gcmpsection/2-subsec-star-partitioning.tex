@@ -1,0 +1,37 @@
+Scopo di questa seconda fase è trasformare gli snapshot in itemset di due elementi che verranno poi processati nella fase successiva.
+Durante la fase di star partitioning vengono aggregati gli snapshot generati nella fase precedente in maniera tale da avere per ogni coppia di oggetti l'insieme degli istanti temporali in cui hanno viaggiato vicini.
+Successivamente per ciascun oggetto si valuterà in maniera univoca tutte le possibili combinazioni tra questo e gli altri oggetti, generando così un insieme di coppie, o itemset \(2\)-dimensionali, collegate alla sequenza di istanti in cui questi risultano vicini.
+
+Dato uno snapshot \(S_{t}\) questo può essere rappresentato con un grafo non direzionato \(G_t\).
+Tale grafico avrà nei nodi gli identificatori degli oggetti, tra nodi sarà presente un arco se quei due oggetti appartengono allo stesso cluster al tempo \(t\).
+È possibile definire \(G_t\) per ogni snapshot \(S_t\).
+
+Il singolo grafo tuttavia è poco espressivo, contiene infatti i dati relativi solo a un singolo istante temporale.
+Si definisce quindi \(G_A\) o grafo aggregato una struttura composta dai singolo \(G_t\) e che descrive l'evoluzione dei cluster nel tempo.
+\(G_A\) contiene gli stessi nodi di ogni \(G_t\).
+Gli archi invece sono formulati nel seguente modo: esiste un arco tra due nodi se, all'interno di tutti i cluster presenti in tutti gli snaphot individuati, questi elementi compaiono assieme in almeno un cluster.
+Oltre a questo sull'arco viene salvata la sequenza di istanti in cui i due oggetti compaiono nello stesso cluster.
+
+Questo grafo così creato viene poi diviso in partizioni.
+Per fare ciò si utilizza una struttura a stella, opportunamente modificata per evitare potenziali ripetizioni di coppie di nodi.
+I nodi, o vertici, vengono infatti numerati sulla base di un ordinamento globale.
+Una struttura così definita viene chiamata \textit{directed star}, o stella diretta (\cref{definition:directed-star})
+
+\begin{definition}[Stella diretta]\label{definition:directed-star}
+
+Dato un vertice con ID globale \(s\) si definisce una stella diretta \(Sr_s\) l'insieme dei vertici direttamente raggiungibili, o vicinato, 
+aventi ID globale \(t > s\), definito \(s\) come ID della stella.
+
+\end{definition}
+
+\(G_A\) viene diviso in \(n\) stelle dirette, dove \(n\) è il numero di nodi nel sistema.
+Grazie all'ordine globale dei vertici, ogni arco è contenuto in una sola partizione del grafo iniziale.
+Ogni stella viene poi processata in maniera autonoma dalla fase di Apriori Enumeration
+
+Questa operazione ha però un limite, ovvero il criterio di ordinamento.
+Un criterio di ordinamento poco efficace porta a generare stelle sbilanciate.
+Stelle con pochi archi terminano presto la computazione, mentre il sistema deve attendere che anche le stelle più grandi finiscano di essere computate.
+Occorre quindi utilizzare un criterio di ordinamento efficace.
+
+Dati \(n\) nodi, sono possibili \(n!\) ordinamenti.
+Euristicamente si dimostra che un ordinamento basato sull'identificatore dei nodi porta a una suddivisione abbastanza bilanciata, di conseguenza SPARE non introduce nessun criterio di ordinamento particolare.

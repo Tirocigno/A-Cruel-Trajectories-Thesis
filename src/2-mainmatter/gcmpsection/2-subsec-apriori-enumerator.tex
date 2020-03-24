@@ -1,0 +1,123 @@
+Ultimo passo dell'algoritmo: date in ingresso le varie stelle dirette prodotte al passo precedente, produce gruppi di movimento come itemset.
+Intuitivamente questa fase riconosce tra le stelle della fase precedente quali coppie di nodi possono essere considerate come valide.
+Una coppia di nodi sarà valida se la sequenza collegate risulterà significativa rispetto a \(k\), \(l\) e \(g\).
+Tutte le coppie valide saranno poi fuse in itemset, intersecando ogni volta le sequenze temporali e assicurandosi che ad ogni passo l'intersezione rimanga valida.
+Questo processo di esplorazione produce itemset massimali aventi dimensione maggiore di \(m\).
+
+Passando poi al procedimento, si parte dalle stelle generate alla fine della fase precedente.
+Ogni stella viene scomposta in coppie nella forma \(\langle(o_v, o_n):(t_1, \ldots, t_n)\rangle\).
+\(o_v\) è il vertice della stella, \(o_n\) è uno dei nodi della stella, \((t_1, \ldots, t_n)\) sono gli istanti temporali sull'arco \((o_v, o_n)\).
+
+Eseguendo una generazione e ricerca di itemset, si può pensare di applicare l'algoritmo Apriori (\cref{subsec:apriori}).
+Tuttavia non è possibile applicare questo algoritmo.
+Il principio della monotonicità tra un set e un suo superset non è valido nel caso degli itemset individuati da SPARE.
+
+Si supponga di considerare due candidati \(C_1 = \langle(o_1, o_2): 1,2,3,6\rangle\) e \(C_2 = \langle(o_1, o_3): 1,2,3,7\rangle\).
+Fissati \(m = 2, k = 3, l = 2, g = 1\), né \(C_1\) né \(C_2\) risultano itemset validi, violano infatti sia il vincolo su \(l\) che su \(g\).
+In \(C_1,\; maxgap = (6-3) > g\) mentre per \(C2, \; maxgap = (7-3) > g\).
+Per quanto riguarda \(l\) invece \(C_1 = \{C_1' = \langle(o_1, o_2): 1,2,3\rangle, C_1'' = \langle(o_1, o_2):6\rangle\}\), risulta evidente che \(|C_1''| < l\).
+Altrettanto vale per \(C_2 = \{C_2' = \langle(o_1, o_3): 1,2,3\rangle, C_2'' = \langle(o_1, o_3):7\rangle\}\), anche qui \(|C_2''| < l\).
+Definito \( C_3 = C_1 \cup C_2 = \langle(o_1, o_2, o_3): 1,2,3\rangle\), questo itemset risulta valido rispetto a tutti e quattro i parametri.
+\(C_3\) quindi è un superset valido di due set non validi: ciò viola la definizione classica di monotonicità.
+
+Occorre quindi definire una nuova nozione di monotonicità.
+Per giungere a questo obbiettivo sono necessari tre nuovi concetti: \textit{Maximal G-Connected sequence}, \textit{Decomposable sequence} e infine \textit{Sequence semplification}.
+
+Data una sequenza di istanti temporali \(T\), la massima sequenza connessa rispetto a \(g\) (MGS) è la più lunga sotto-sequenza \(T'\) tale che non \(T'\) risulti connessa rispetto a \(g\) e non esista \(T'' \supset T' \) che sia a sua volta connessa rispetto a \(g\).
+Ogni MGS deve essere quindi connessa rispetto a \(g\) e massima nel numero di elementi.
+Ogni sequenza può essere divisa in \(n\) MGS.
+Ciascuna di queste MGS è disgiunta dalle altre se non per il primo o l'ultimo elemento.
+Inoltre l'unione di tutte le MGS produce la sequenza originale.
+Infine ogni MGS di una sotto-sequenza può essere considerata come sotto-sequenza di una MGS della sequenza originale.
+Prese ad esempio le sequenze \(T' = (1,2,4,5,6,9,10,11,13)~\text{e}~T'' = (1,2,4,5,6)\) con \(g = 2\).
+\(T'\) ha due MGS: \(T'_a = (1,2,4,5,6)\) e \(T'_b = (9,10,11,13)\).
+\(T''\) ha una sola MGS corrispondente alla sequenza stessa.
+\(T''\) è sotto-sequenza di \(T'\), quindi ogni MGS di \(T''\) dovrà essere sotto-sequenza di una MGS di \(T'\).
+In questo caso, \(T''\) e \(T'_a\) coincidono, dimostrando la validità della proprietà.
+
+Una volta definito il concetto di MGS, si può introdurre quello di sequenza decomponibile (\textit{Decomposable sequence}).
+Una sequenza decomponibile è una sequenza che ha al suo interno almeno una sotto-sequenza valida rispetto a \(k\), \(l\) e \(g\).
+Una sequenza si definisce decomponibile se, presa una qualunque delle sue MGS, questa risulta consecutiva rispetto a \(l\) e avente lunghezza maggiore o uguale a \(k\).
+Prese ad esempio la sequenza \(T' = (1,2,4,5,6,9,10,11,13)\) con \(k=5\), \(l=2\) e \(g = 2\), si considerano le due MGS \(T'_a = (1,2,4,5,6)\) e \(T'_b = (9,10,11,13)\).
+\(T'_a\) risulta sia consecutiva rispetto a \(l\) che lunga \(k\) elementi, di conseguenza \(T'\) può essere definito come sequenza decomponibile.
+
+Infine si definisce semplificazione di sequenza (\textit{Sequence simplification}).
+Data un sequenza \(T\) si definisce sequenza semplificata o \(Sim(T)\) la sotto-sequenza di \(T\) ottenuta applicando due trasformazioni:
+
+\begin{itemize}
+    \item \textbf{f-step}. Rimuove i segmenti di \(T\) che non rispettano la consecutività rispetto a \(l\).
+    \item \textbf{g-step}. Tra le MGS individuate sul risultato di f-step, scarta quelle che hanno dimensione minore di \(k\). 
+\end{itemize}
+
+Ad esempio dato \(T = (1,2,4,5,6,9,10,11,13)\) e \(l = 2, k = 3, g = 2\).
+Alla fine di f-step \(T = (1,2,4,5,6,9,10,11)\), \(13\) viene scartato in quanto facente parte di una sotto-sequenza di lunghezza uno. 
+Questa nuova sequenza ha due MGS: \((1,2,4,5,6)\) e \((9,10,11)\).
+Il secondo di questi due elementi viene scartato in quanto avente dimensioni minori di \(k\).
+La sequenza semplificata risulta quindi \((1,2,4,5,6)\).
+
+Il processo di semplificazione di una sequenza può portare alla creazione di una sequenza nulla, qualora non siano verificate certe condizioni su \(l\) e \(k\).
+Per definizione, la sequenza vuota non risulta decomponibile.
+Alla luce di ciò è possibile esprimere la seguente proprietà: 
+per qualunque \(T\) supeset di una sequenza decomponibile vale che \(Sim(T) \neq \varnothing\).
+Banalmente, per una sequenza decomponibile è impossibile che  \(Sim(T) \neq \varnothing\), ciò vale anche per ogni suo superset.
+
+Una volta introdotto quest'ultimo concetto è possibile formulare la nuova definizione di monotonicità (\cref{definition:monotonicity}):
+
+\begin{definition}[Monotonicità]\label{definition:monotonicity}
+
+Dato un candidato pattern \(P = \langle O:T \rangle\), se \(Sim(P.T) = \varnothing\) allora ogni pattern \(P'\) tale che \(P' \supseteq P\) può essere scartato.
+
+\end{definition}
+
+La definizione si basa sulla considerazione che qualunque superset di \(P\) è composto dall'unione degli oggetti e dall'intersezione delle sequenze temporali.
+Risulta a questo punto scontato affermare che qualunque sotto-sequenza di una sequenza tale che \(Sim(T) \neq \varnothing\) a sua volta produce una sequenza vuota durante il processo di semplificazione.
+
+Definita la nuova monotonicità, lo pseudocodice della fasi di Apriori Enumerator è presentato nel \cref{alg:apriori-enumerator}.
+
+\begin{algorithm}[H]
+\caption{\( Apriori Enumerator\)}\label{alg:apriori-enumerator}
+\begin{algorithmic}[1]
+\Require \(Sr_s\)
+\State \(C \gets \varnothing\)
+\ForEach{ archi \(c = <o_i \cup o_j, T_i \cap T_j> \) in \(Sr_s\)} \Comment{Per ogni 2-itemset.}
+        \If{\(Sim(T_i \cap T_j) \neq \varnothing\)} \Comment{Se la semplificazione dell'intersezione delle sequenze risulta valida}
+            \State \(C \gets C \cup c\) \Comment{La tupla viene aggiunta a C} 
+        \EndIf
+    \EndFor
+\State \(level \gets 2\)  
+
+\While{\(C \neq \varnothing\)} 
+    \ForEach{\(c_1 \in C\)}
+        \ForEach{\(c_2 \in C \land |c_1.O \cup c_2.O| = level\)} \Comment{Per tutti i validi n-itemset}
+            \State \(c' = <c_1.O \cup c_2.O, c_1.T \cap c_2.T>\) \Comment{Vengono generati tutti gli n+1 itemset}
+                 \If{\( Sim(c_1.T \cap c_2.T) \neq \varnothing \)} \Comment{Se la semplificazione dell'intersezione delle sequenze risulta valida}
+                    \State \(C \gets C \cup c\) \Comment{La tupla viene aggiunta a C} 
+                \EndIf
+        \EndFor
+        \If{Nessun c' viene aggiunto a \(C\) e \(c_1\) è un pattern valido} 
+            \State \Return \(c_1\) \Comment{\(c_1\) viene restituito in output in quanto massimale} 
+        \EndIf
+    \EndFor
+    \State \(O_u \gets \) unione di tutti i \(c.O\) in \(C\)
+    \State \(T_u \gets \) unione di tutti i \(c.T\) in \(C\)
+    \If{\(Sim(T_u) \neq \varnothing\)} \Comment{Controllo della forward closure} 
+            \State \Return \(<O_u, T_u>\) \Comment{L'intersezione tra tutti i possibili itemset in C è massimale, quindi l'esplorazione è terminata} 
+        \EndIf
+\EndWhile
+
+\end{algorithmic}
+\end{algorithm}
+
+SPARE parte dalla valutazione degli itemset contenenti due elementi.
+Questi vengono filtrati secondo il principio di monotonicità descritto sopra.
+
+Successivamente comincia l'esplorazione dello spazio di ricerca: ogni itemset valido \(n\)-dimensionale viene fuso con tutti gli altri tali da formare 
+itemset \(n+1\)-dimensionali.
+Questi sono poi valutati con la stessa logica usata sopra: i validi vengono mantenuti, gli altri sono scartati.
+Nel caso un itemset durante questa fase non produca nessun superset valido, questo viene valutato come output.
+Se risulta rilevante rispetto a \(m\) e \(k\) viene aggiunto all'output, altrimenti viene scartato.
+
+Una volta terminato di computare i candidati del livello successivo, viene eseguito un controllo sulla \(forward closure\).
+Questa operazione consiste nel fondere assieme tutti gli itemset da valutare e testare se il candidato così costruito sia un itemset valido e rilevante.
+Se ciò risulta vero, allora questo può essere restituito in output in quanto massimale, altrimenti i candidati singoli sono valutati con la stessa logica descritta sopra.
+

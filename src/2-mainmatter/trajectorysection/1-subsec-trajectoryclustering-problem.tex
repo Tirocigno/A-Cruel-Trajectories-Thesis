@@ -1,10 +1,7 @@
-Il clustering di traiettorie è uno degli argomenti più discussi all'interno del mining di traiettorie, che mira
-a individuare le similarità tra i movimenti dei vari oggetti e dedurre comportamenti comuni sulla
-base di una divisione in cluster.
 
-Come detto nella~\cref*{subsec:problem:trajectorydata}, i dati di traiettoria sono molto più complessi
-rispetto ai dati solitamente utilizzati con gli algoritmi presentati nella~\cref*{subsec:problem:clustering}.
-Occorre quindi definire modifiche degli algoritmi presenti in letteratura per riuscire a fare operazioni di clustering
+Come detto nella~\cref{sec:measure}, i dati di traiettoria sono molto più complessi
+rispetto ai dati solitamente utilizzati con gli algoritmi di clustering tradizionali.
+Occorre quindi definire modifiche di questi ultimi per riuscire a fare operazioni di clustering
 efficienti, in quanto sarebbe impossibile catturare tutta la complessità dell'informazione con
 tecniche pensate per dati a bassa dimensionalità.
 
@@ -12,15 +9,15 @@ Alla luce di quanto detto sopra, per il clustering di traiettorie sono individua
 
 \begin{itemize}
 
-  \item Supporto alla dimensionalità dei dati.
-  Obbiettivo del clustering di traiettorie è la definizione di cluster tenendo conto di tutte le informazioni presenti sui dati.
+  \item \textbf{Supporto alla dimensionalità dei dati}.
+  Obbiettivo del clustering di traiettorie è la ricerca di cluster tenendo conto di tutte le informazioni presenti sui dati.
   Ognuno di questi attributi dovrà essere considerato nel momento in cui verranno portate avanti le operazioni di divisione e raggruppamento delle traiettorie.
 
-  \item Definizione di una metrica di similarità tra traiettorie.
-  Come presentato nella~\cref{subsec:problem:trajectorydata} il problema della similarità tra traiettorie è complesso e sono presenti diverse soluzioni.
+  \item \textbf{Definizione di una metrica di similarità tra traiettorie}.
+  Come presentato nella~\cref{sec:measure} il problema della similarità tra traiettorie è complesso e sono presenti diverse soluzioni.
   Scopo della ricerca è quello di individuare metriche che individuino le differenze tra le traiettorie in maniera affidabile e efficace.
 
-  \item Qualità dell'algoritmo.
+  \item \textbf{Qualità dell'algoritmo}.
   L'algoritmo utilizzato nelle operazioni di clustering deve essere efficiente e scalabile, ad esempio impiegando apposite strutture dati per
   ridurre i tempi di accesso ai dati, oppure utilizzando le tecnologie di computazione Big Data per velocizzare l'esecuzione degli algoritmi.
 
@@ -30,6 +27,37 @@ Nonostante nessuno degli algoritmi di clustering tradizionali abbia tutte le car
 valide in buona parte dei casi.
 Di conseguenza molti algoritmi pensati per i dati di traiettoria non sono che estensioni di quelli già noti in letteratura.
 
-Analizzando il panorama dei possibili algoritmi di clustering di traiettorie, si possono individuare alcune famiglie sulla base delle caratteristiche a cui
-viene dato maggior peso: gli algoritmi spaziali, quelli temporali, il clustering basato sul partizionamento, il clustering di traiettorie incerte e infine algoritmi
-basati su un raggruppamento di natura semantica.
+Gli algoritmi di clustering di traiettorie sono 
+classificabili secondo la natura del dato in output
+e sulla tipologia di clustering.
+La natura del dato è direttamente collegata alle dimensioni considerate nelle operazioni di clustering:
+la ricerca può essere condotta considerando solo la componente spaziale o includendo anche quella temporale.
+La tipologia di clustering invece riguarda i cluster prodotti in output: algoritmi partizionanti 
+produrranno cluster disgiunti, algoritmi di clustering sovrapposto cluster la cui intersezione non è vuota.
+
+La \cref{tab:clus-alg} riassume i principali algoritmi che saranno trattati nelle sezioni successive alla luce della classificazione appena introdotta.
+\begin{table}[H]
+    \centering
+   \begin{tabular}{||c c c||}
+ \hline
+ Algoritmo & Natura dei dati & Tipologia di clustering \\ [0.5ex] 
+ \hline\hline
+CB-SMoT & Spaziale & Sovrapposto \\ 
+ \hline
+CACT & Spaziale & Sovrapposto \\ 
+ \hline
+T-OPTICS & Spazio-temporale & Sovrapposto \\
+ \hline
+TraceMob & Spaziale & Partizionante \\
+ \hline
+ DSC & Spazio-temporale & Sovrapposto \\
+ \hline
+
+\end{tabular}
+    \caption{Classificazione degli algoritmi di clustering di traiettorie trattati}
+    \label{tab:clus-alg}
+\end{table}
+
+\begin{center}
+
+\end{center}

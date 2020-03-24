@@ -1,0 +1,26 @@
+La prima fase di SPARE è la generazione degli Snapshot.
+Durante questo passo viene valutata la dimensione spaziale delle traiettorie in relazione alla dimensione temporale.
+Scopo della fase è individuare ad ogni istante quali oggetti sono vicini e quali no, in modo da creare una sequenza di cluster che descrivono l'evolvere dei gruppi nel tempo.
+
+Unico passo di preprocessing necessario prima di questa fase è la definizione di una scala temporale univoca all'interno del dataset.
+Tutti i punti devono infatti essere rapportati a una scala di tempo omogenea, altrimenti i passi successivi non sarebbero possibili.
+Il primo passo consiste quindi nella definizione di una sequenza di istanti univoci chiamata \(T_{db}\).
+Tutti i punti di ogni traiettoria saranno espressi rispetto a questa scala.
+
+Una volta determinata la scala temporale, si scompone ogni traiettoria nei suoi singoli punti.
+Questi punti vengono poi raggruppati sulla base dell'istante temporale in cui accadono.
+Per ogni istante temporale nella scala sarà determinato un insieme di punti che indicano la posizione delle rispettive traiettorie al tempo \(t_{i} \in T_{db}\).
+
+A questo punto è necessario valutare quali punti siano vicini e quali no.
+Come detto nella \cref{sec:comovement-definition}, algoritmi di clustering diversi generano pattern di movimento diversi (density o distance based).
+SPARE supporta la ricerca di entrambi i pattern: sta all'utente scegliere quale algoritmo impiegare.
+Questa scelta risulta trasparente alle successive fasi di itemset mining.
+
+Questo è l'unico passo dove vengono considerate le dimensioni spaziali.
+Intuitivamente, ogni traiettoria avrà al massimo una posizione per ogni istante temporale.
+Il processo di clustering risulterà quindi partizionante, così da prevenire eventuali ambiguità nelle fasi successive.
+
+Questa operazione produce una serie di raggruppamenti di cluster.
+Uno snapshot \(S_t\) non è altro che una coppia \(\langle t, S(t) \rangle\) dove \(t\) rappresenta un instante temporale e \(S(t)\) l'insieme dei cluster individuati a quello specifico istante.
+
+Gli snapshot sono l'output di questa prima fase.

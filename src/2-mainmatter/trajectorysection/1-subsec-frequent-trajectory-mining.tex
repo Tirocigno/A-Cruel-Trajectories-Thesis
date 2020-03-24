@@ -1,0 +1,34 @@
+La ricerca di itemset frequenti può essere adattata ai dati di traiettoria.
+Ciò non è altro che un'evoluzione del mining di sequenze.
+
+Il mining di pattern su un insieme di item è un caso particolare di mining di itemset frequenti.
+La principale modifica è l'introduzione del concetto di tempo e , conseguentemente, di sequenza.
+Una sequenza non è altro che un itemset i cui elementi sono ordinati rispetto al tempo.
+Ad esempio, l'itemset \(<a, ab, c>\) può essere interpretato come una sequenza in cui i tre elementi
+si susseguono in istanti temporali contigui.
+Nella ricerca di sequenze, gli attributi sono espliciti.
+Nel caso dei dati di traiettoria però, ciò non risulta vero: ogni punto di traiettoria grezza è composto da latitudine, longitudine e istante temporale.
+Tali punti sono difficilmente coincidenti tra loro, ciò causa una difficoltà nell'estrazione delle feature.
+Per superare questa problematica, occorre ricorrere all'utilizzo di astrazioni di traiettoria:
+mappando il dataset su uno specifico sistema di riferimento, è possibile accomunare i punti negli stessi quanti.
+
+Questa astrazione consente di superare certi limiti, tuttavia non è sufficiente a risolvere il problema.
+Gli algoritmi di riconoscimento di itemset frequenti o sequenze, oltre ad avere un alto costo computazionale, non sono in grado di processare la contiguità spaziale e la continuità temporale.
+Inoltre nel riconoscimento di sequenze sono richieste strette relazioni di adiacenza tra le feature, cosa non sempre possibile nelle traiettoria, a causa della loro intrinseca incertezza.
+
+In letteratura sono state proposte diverse soluzioni per superare questi limiti:
+ad esempio per quanto riguarda la generazione delle sequenze è stato proposto l'utilizzo di una struttura ad albero per generare i pattern di movimento \cite{cao2005mining}.
+Per quanto riguarda invece le relazioni ignorate, sono stati proposti approcci per considerare la contiguità spaziale \cite{chen2011personal} e quella temporale \cite{lv2015route}. 
+
+Le applicazioni del mining di traiettorie presenti in letteratura riguardano l'estrazione dei percorsi 
+più frequentati \cite{qiu2016mining} e delle regioni più trafficate \cite{zheng2018spatial}.
+È interessante considerare come la ricerca di luoghi e percorsi frequentati sia ortogonale rispetto all'individuazione di gruppi di oggetti che hanno viaggiato assieme per un certo periodo di tempo.
+Approfondendo questo confronto, emerge che la definizione del problema è molto simile, ma cambia il ruolo di transazioni e feature.
+Nel caso di ricerca di luoghi frequenti in un dataset, tale frequenza è determinata sulla base degli oggetti che passano per un certo punto.
+Trattando invece di analisi di oggetti che si sono mossi assieme, 
+intuitivamente il supporto è definibile come l'insieme di posizioni condivise dal gruppo perché sia considerato frequente.
+
+La ricerca di gruppi di oggetti non è affrontabile con le ordinarie tecniche di itemset mining.
+Il numero degli oggetti infatti supera di gran lunga quello delle posizioni visitate, di conseguenza 
+l'insieme delle transazioni avrebbe cardinalità molto inferiore rispetto a quello delle feature.
+Tale condizione esplode il costo computazionale per la ricerca di itemset frequenti.

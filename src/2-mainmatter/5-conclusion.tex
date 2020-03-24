@@ -1,1 +1,26 @@
-.
+Il contributo fornito da questa tesi si spinge nell'analisi approfondita del clustering di traiettorie e del frequent itemset mining.
+Durante questa analisi è stata individuata una categoria a metà tra il clustering e il frequent trajectory mining: la ricerca di pattern di co-movimento.
+Sono stati indagati quindi i principali algoritmi di analisi di questi pattern.
+Tra tutti il framework SPARE è risultato particolarmente interessante, per via della sua implementazione distribuita.
+Inoltre SPARE formalizza il concetto e la ricerca di pattern di co-movimento generici (GCMP), pattern che tramite la configurazione di alcuni parametri possono esprimere i principali pattern di co-movimento.
+SPARE tuttavia risulta limitato nel momento in cui si vuole espandere la dimensionalità dei dati oppure si considerano vincoli di contiguità nello spazio.
+
+In questa tesi è stato implementato il framework CUTE, algoritmo generico per la ricerca di gruppi di traiettorie su un insieme di dimensioni custom in ambito big data.
+Questo è stato adattato e configurato per la ricerca di co-movement pattern.
+CUTE è stato poi testato approfonditamente su vari dataset per valutare i suoi risultati e le sue performance.
+Traendo qualche conclusione dal lavoro svolto, è possibile dire che la ricerca di pattern di movimento è una categoria ampia e gli algoritmi presenti in letteratura faticano a coprila nel suo intero.
+Esistono infatti una serie di possibilità e definizioni di pattern che difficilmente sono totalmente compatibili tra di loro.
+CUTE lavora in questa direzione, tentando di coprire tutti i pattern di movimento presenti nella categoria.
+La chiave per questo sta nell'approccio di CUTE al problema della ricerca: in primo luogo la possibilità di esprimere un sistema di riferimento custom consente di modellare la ricerca di un pattern su un qualunque insieme di dimensioni, monotone o meno.
+Successivamente la natura generica dei pattern restituiti in output consente di ricercare più categorie sulla base della configurazione di parametri specificata.
+In conclusione CUTE è un framework decisamente valido per cercare di affrontare il problema della ricerca di pattern di co-movimento nella sua totalità.
+
+CUTE però non si limita alla ricerca di pattern di co-movimento, ma può essere espanso alla ricerca di altre categorie di gruppi.
+Durante gli esperimento compiuti, non sono mai considerate dimensioni diverse dallo spazio e dal tempo.
+In futuro sarebbe sicuramente utile provare ad integrare altre dimensioni nella ricerca e vedere i risultati estratti dall'algoritmo.
+Un'altra possibile direzione riguarda l'aggiunta di ulteriori meccaniche di pruning per gli itemset individuati.
+Com'è possibile notare dai risultati, il numero di cluster per parametri ragionevoli è comunque molto alto.
+Qualora sia necessaria una ricerca più fine, si potrebbe pensare ad esempio di introdurre una nuova metrica, la coesione, per valutare la bontà di un itemset.
+La coesione esprimerebbe il rapporto tra i movimenti di un gruppo e i movimenti dei singoli elementi che lo compongono.
+Cluster abbastanza coesi rappresenterebbero oggetti che hanno viaggiato assieme per buona parte del loro percorso singolo.
+Al contrario cluster con un basso valore di coesione sarebbero composti da oggetti che hanno viaggiato assieme una breve parte del loro percorso totale, di conseguenza sarebbero meno interessanti.

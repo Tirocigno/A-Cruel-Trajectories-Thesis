@@ -1,0 +1,65 @@
+Spark si basa su due principali astrazioni: RDD e DAG.
+
+RDD, o \textit{Resilient Distribuited Dataset}, è la rappresentazione del framework Spark di una collezione di dati di qualunque natura.
+Questa collezione è divisa in partizioni, ciascuna salvata su un nodo.
+Un RDD può essere generato da qualunque fonte, ad esempio la query su un database esterno o la lettura di un file di input.
+
+Le caratteristiche di un RDD sono le seguenti:
+
+\begin{itemize}
+    \item \textbf{Type inference}.
+    Determina i tipi di dato durante la compilazione, senza bisogno di specificarli in fase di scrittura del codice.
+    Questo è reso possibile dal linguaggio funzionale Scala, in cui è scritto il framework.
+    
+    \item \textbf{Cachability}.
+    Gli RDD non sono di default salvati in memoria, ma sono processati e poi scartati.
+    Per migliorare le performance, è possibile eseguire caching salvando in memoria o su disco un RDD.
+    Ciò consente di evitare di doverlo ricalcolare ad ogni utilizzo.
+    
+    \item \textbf{Immutabilità}.
+    Un RDD è per definizione immutabile.
+    Qualunque operazione di trasformazione produce un nuovo RDD.
+    Ciò semplifica la gestione di corse critiche senza bisogno di aggiungere nessun meccanismo di accesso alle risorse.
+    
+    \item \textbf{Laziness}.
+    Le operazioni su un RDD possono essere di due tipi: trasformazioni o azioni.
+    Le trasformazioni modificano i dati all'interno di un RDD, costruendone di fatto uno nuovo.
+    Le azioni calcolano un risultato da restituire al driver o salvare su piattaforme esterne (ad esempio database Hive).
+    Ogni operazione effettuata su un RDD non è eseguita fino alla richiesta di un azione.
+    Le trasformazioni infatti producono metadati che vengono utilizzati nel momento in cui tramite un azione viene scatenata la catena di trasformazioni.
+
+\end{itemize}
+
+La proprietà di laziness pone le basi per la definizione di DAG.
+Durante la computazione, a un RDD saranno associate più trasformazioni: queste possono essere rappresentate come un grafo.
+Questo è chiamato lineage graph e costituisce la base per la definizione del piano di esecuzione.
+Sulla base delle operazioni da eseguire e delle partizioni coinvolte, viene definito un piano di ottimizzazione.
+Questo aggregherà operazioni diverse e sfrutterà il principio della data locality.
+
+Una volta terminata la fase di ottimizzazione, il piano di esecuzione viene presentato nella forma di DAG (Directed Acyclic Graph).
+DAG è un grafo i cui nodi sono RDD e gli archi le trasformazioni che portano da un RDD all'altro.
+Il grafo è direzionato e sono assenti cicli al suo interno.
+
+Determinato il DAG, questo viene diviso in stage secondo il seguente principio: si raggruppano operazioni fino a giungere a una trasformazione che richieda un processo di shuffle dei dati.
+Uno shuffle è un operazione di collezione e ridistribuzione dei dati necessaria per certe istruzioni, come ad esempio un raggruppamento dei dati su una certa chiave.
+A questo punto lo stage termina e ne viene creato uno nuovo.
+Ogni stage è poi diviso in task in numero pari a quello delle partizioni moltiplicato per il numero delle trasformazioni da eseguire.
+Ogni task è assegnato a un nodo con il principio della data locality, avendo però attenzione di non sovraccaricare il sistema.
+In caso di problemi, un task può essere schedulato su nodi differenti in modo da prevenire blocchi e ritardi.
+
+Trattando infine dell'architettura di Spark, il paradigma adottato è ancora una volta master-slave.
+Di seguito sono trattati i principali componenti dell'architettura di Spark:
+
+\begin{itemize}
+    \item \textbf{Driver}.
+    Master dell'architettura, unico nell'applicazione. 
+    Gestisce le fasi della creazione e ottimizzazione di DAG, inoltre assegna i task ai vari executor.
+    
+    \item \textbf{Executor}.
+    Processo avente il compito di eseguire su ogni core un task.
+    Ad ogni applicazione possono essere assegnati più executor, ciascuno avente una certa quantità di RAM e un numero fissato di CPU.
+    
+    \item \textbf{Cluster Manager}.
+    Componente che si occupa delle risorse.
+    Può essere un processo stanalone o un resource manager compatibile con Spark, come ad esempio YARN.
+\end{itemize}

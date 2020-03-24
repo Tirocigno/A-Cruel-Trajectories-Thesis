@@ -1,10 +1,10 @@
-Nelle sezioni precedenti sono stati analizzati i dati di traiettoria sotto il profilo
+
+Fino ad ora sono stati analizzati i dati di traiettoria sotto il profilo
 spaziale e temporale, tuttavia sarebbe incompleto limitare la panoramica sul clustering di traiettorie
 a queste due categorie.
 Lo spazio-tempo sono indubbiamente le dimensioni più importanti all'interno di una traiettoria,
-tuttavia, come affermato nella~\cref{subsec:problem:trajectorydata},
+tuttavia, come affermato nella~\cref{sec:trajectorydata},
 i dati che costituiscono quest'ultima hanno molte più dimensioni di quelle fin d'ora considerate.
-
 Partendo da questo punto, sono state ideate altre categorie di clustering e raggruppamento dei dati
 che sfruttano parte di queste informazioni in combinazione con gli attributi spazio-temporali,
 i quali mantengono comunque un ruolo cruciale nella divisione delle traiettorie.
@@ -22,6 +22,8 @@ dei punti in cui ``spezzare'' la traiettoria originale.
 Per risolvere questo problema sono state ipotizzate diverse soluzioni,
 ad esempio il framework \textit{DST} (Distribuited Subtrajectory Clustering)~\cite{tampakis2019scalable} utilizza una metrica basata
 sul cambio di densità nell'intorno dei punti della traiettoria per determinare le divisioni.
+DST ricerca all'interno di ogni traiettoria i punti di separazione, successivamente raggruppa i segmenti 
+utilizzando una versione modificata di k-means.
 In generale questi framework hanno buoni risultati quando computano dataset di traiettorie
 di lunghezze varie, inoltre resistono molto bene all'aumento del numero di punti da processare;
 tuttavia non è banale individuare i segmenti ideali per catturare tutte le peculiarità
@@ -56,10 +58,3 @@ oppure capire quale sarà il percorso di un utente assegnato a una certa categor
 di come si sono mossi gli altri appartenenti al medesimo gruppo~\cite{ying2011semantic}.
 Questa categoria è in continua crescita, con algoritmi sempre più complessi e che sfruttano sempre di
 più l'interezza dell'informazione offerta dal singolo dato.
-
-
-
-
-
-
-

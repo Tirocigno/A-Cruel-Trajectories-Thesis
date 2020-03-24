@@ -27,7 +27,7 @@
 % \usepackage{minted}       % evidenzia la sintassi dei listati di codice; richiede pygments installato e shell-escape
 
 \begin{VerbatimOut}{\jobname.xmpdata}
-\Title{Titolo}
+\Title{naldini_federico_tesi}
 \Subject{Oggetto}
 \Author{Niccolò Maltoni}
 \Copyright{Questo documento è fornito sotto licenza Apache License, Version 2.0}
@@ -38,6 +38,7 @@
   english,italian             % definizione delle lingue da usare
 ]{varioref}                     % introduce il comando \vref da usarsi nello stesso modo del comune \ref per i riferimenti
 
+\usepackage{shellesc}         % aggiunge il comando \write18 necessario su Overleaf per frontespizio
 \usepackage[a-1b]{pdfx}
 
 %% Font
@@ -55,6 +56,7 @@
 
 %% Matematica
 \usepackage{amsmath}
+\usepackage{amsthm}
 % non bisogna assolutamente invocare il pacchetto amssymb
 \usepackage[%
   math-style=ISO              % per scrivere la matematica delle scienze sperimentali bisogna seguire le norme ISO
@@ -167,15 +169,28 @@
   pdfstartview={Fit},
   pdflang={it}
 }
+\usepackage{subcaption}
 
 \usepackage[%
   english,italian,            % definizione delle lingue da usare
-  nameinlink                  % inserisce i link nei riferimenti
+  nameinlink,                 % inserisce i link nei riferimenti
+  noabbrev                      %Impedisce le abbreviazioni
 ]{cleveref}                     % permette di usare riferimenti migliori dei \ref e dei varioref
 
 \usepackage{booktabs}         % permette di gestire le linee sulle tabelle in alternativa alle hbox
-\newtheorem{definition}{Definition}
-\usepackage{mathtools}
+\usepackage{mathtools}          % permette di mandare a capo le definizioni matematiche
+
+\usepackage[Algoritmo]{algorithm}          % permette di scrivere algoritmi.
+% \usepackage{algorithm2e}          % permette di scrivere algoritmi.
+% \usepackage{algorithmicx}          % permette di scrivere algoritmi.
+\usepackage[noend]{algpseudocode} % aggiunge il supporto allo pseudocodice.
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+\renewcommand{\algorithmicrequire}{\textbf{Richiede:}}
+\renewcommand{\algorithmicensure}{\textbf{Restituisce:}}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definizione}[section]
 
 \begin{document}
 
@@ -191,18 +206,22 @@
   \mainmatter{}
   \pagenumbering{arabic}
   \pagestyle{headings}
+  
+  \addchap{Introduzione}\label{chapter:chapter0}
+  \input{src/2-mainmatter/0-introduction}
 
-  \chapter{Clustering di traiettorie}\label{chapter:chapter1}
+
+  \chapter{Problematica}\label{chapter:chapter1}
   \input{src/2-mainmatter/1-trajectory-clustering.tex}
 
   \chapter{Tecnologie utilizzate}\label{chapter:chapter2}
   \input{src/2-mainmatter/6-bigdatatechniques.tex}
 
-  \chapter{L'algoritmo G.C.M.P}\label{chapter:chapter3}
+  \chapter{Pattern di co-movimento}\label{chapter:chapter3}
   \input{src/2-mainmatter/2-gcmp-algorithm.tex}
 
-  \chapter{L'algoritmo CU.TE}\label{chapter:chapter4}
-
+  \chapter{Colossal Trajectory Mining}\label{chapter:chapter4}
+  \input{src/2-mainmatter/3-macho-algorithm.tex}
 
   \chapter{Test sperimentali}\label{chapter:chapter5}
   \input{src/2-mainmatter/4-comparison-algorithm.tex}
@@ -210,11 +229,11 @@
   \chapter{Conclusioni e sviluppi futuri}\label{chapter:chapter6}
   \input{src/2-mainmatter/5-conclusion.tex}
 
-  \appendix
-  \input{src/2-mainmatter/appendices.tex}
-
+  \addchap{Ringraziamenti}\label{chapter:chapter7}
+  \input{src/3-backmatter/ringraziamenti.tex}
+  
   \backmatter{}
   \input{src/3-backmatter/bibliografia.tex}
-  \input{src/3-backmatter/ringraziamenti.tex}
+  
 
 \end{document}

@@ -1,0 +1,31 @@
+Nel processo di testing e confronto tra i due algoritmi sono stati impiegati due diversi dataset.
+
+Il primo dataset utilizzato è Geolife (\cite{GeolifeG31:online}).
+Questo dataset è composto da un insieme di traiettorie raccolte in Asia, in particolare in prossimità della città di Pechino.
+In Geolife sono presenti 17158 traiettorie distinte, composte da punti contenenti latitudine, longitudine e altitudine.
+Il \(91\%\) delle traiettorie nel dataset sono generate da dispositivi aventi tempo di campionamento compreso tra \(1\) e \(5\) secondi.
+Il tempo totale coperto da tutte le traiettorie nel dataset è circa quattro anni.
+
+Il secondo dataset impiegato è composto da un insieme di traiettorie registrate nella città di Oldenburg.
+Questo conta 1000000 traiettorie, a differenza di quanto detto prima, i punti non sono espressi in coordinate polari, ma in coordinate cartesiane rispetto a un sistema di riferimento custom.
+Anche per quanto riguarda la dimensione temporale, il dataset viene fornito con punti aventi una componente temporale relativa a una sequenza di istanti.
+La sequenza in questione conta 245 istanti distinti.
+
+La \cref{tab:metrics-dataset} riassume le caratteristiche principali dei dataset impiegati nei test.
+Per quanto riguarda il numero di traiettorie, Geolife viene utilizzato sempre nella sua interezza, Oldenburg invece partizionato diversamente a seconda delle situazioni di impiego.
+
+
+\begin{table}[H]
+    \centering
+   \begin{tabular}{||c c c c c||}
+ \hline
+     Dataset & Spazio & Tempo & Punti & Traiettorie\\ [0.4ex] 
+ \hline\hline
+    Geolife & Coordinate polari & yyyy-mm-gg hh:mm:ss & 18891115 & 17158 \\ 
+ \hline
+     Oldenburg & Coordinate cartesiane & Sequenziale & 64895840 & 1000000 \\ 
+ \hline
+\end{tabular}
+    \caption{Riassunto delle caratteristiche principali dei due dataset utilizzati}
+    \label{tab:metrics-dataset}
+\end{table}

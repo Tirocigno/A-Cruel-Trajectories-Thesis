@@ -4,17 +4,13 @@ Negli anni vari algoritmi sono stati proposti per estrarre dai dati informazioni
 
 Il primo ambito di ricerca sui dati spaziali riguarda i luoghi di maggior interesse, ovvero le posizioni
 in cui sono passati un certo numero di oggetti all'interno del dataset.
-Il framework \textit{CB-SMoT} (Clusteing Based Stop and Moves of Trajectories)~\cite{palma2008clustering} esegue questa
-ricerca considerando per ogni traiettoria l'insieme dei movimenti (\textit{moves}) e degli stop. Tali
-caratteristiche sono estratte usando una versione modificata di DBSCAN\@.
+A questa categoria appartiene il framework \textit{CB-SMoT} (Clustering Based Stop and Moves of Trajectories)~\cite{palma2008clustering}.
+Questo algoritmo ricerca all'interno delle varie traiettorie considerando gli stop, ovvero segmenti in cui la velocità della traiettoria cala sotto una certa soglia o risulta uguale a zero.
+Successivamente questi segmenti sono raggruppati in cluster usando una versione modificata di DBSCAN\@.
+Tale versione dell'algoritmo si basa sulla velocità invece che sulla densità.
+Infine ogni cluster viene confrontato con la mappa dell'area coperta dalle traiettorie e viene associato a uno specifico punto o area.
+Questa associazione permette di interpretare meglio il risultato ottenuto dall'algoritmo.
 
-Successivamente è possibile analizzare traiettorie generate da movimenti esclusivamente di esseri umani.
-Questa analisi consente di individuare comportamenti comuni e suddividere ad esempio un insieme di
-utenti sulla base delle loro azioni.
-Un algoritmo esemplificativo è proposto dagli autori Tsumoto and Hirano~\cite{tsumoto2009behavior}.
-
-Un altro ambito è quello dei \textit{c-omovement pattern}, ovvero di
-gruppi di oggetti che hanno viaggiato assieme per un certo periodo nello spazio-tempo.
 
 Ancora è possibile estrarre da un insieme di dati di traiettorie, l'insieme delle strade più
 frequentate; ciò diverge dal primo ambito presentato poiché la ricerca di un percorso risulta
@@ -23,12 +19,13 @@ più complesse di una singola località, come ad esempio una continuità nello s
 la compongono.
 \textit{CACT}~\cite{hung2015clustering} (Clustering and Aggregating Clues of Trajectories) è un possibile framework per
 ricercare percorsi che rappresentino i comportamenti di una certa categoria di utenti.
+L'idea dell'algoritmo è di definire una misura di similarità basata sugli indizi (\textit{clue}):
+Un indizio è definibile come la vicinanza spazio-temporale di punti di traiettorie diverse che però condividono lo stesso comportamento.
+Tale indizio costituisce una corrispondenza parziale di comportamento.
+Sulla base della presenza di indizi simili, vengono costituiti cluster di traiettorie, che raggruppano queste ultime sulla base di un certo comportamento.
+I cluster così ottenuti sono però ancora percorsi parziali, per determinare percorsi completi è necessario un ulteriore passo di ricerca di indizi e fusione dei cluster.
 
-Tutti questi ambiti partono dalla stessa interpretazione dei dati, cercando di eseguire una separazione
-tra le varie traiettorie sulla base delle proprietà dei singoli punti.
-Un' alternativa a questa visione è presente nel clustering basato su forma (\textit{Shape Based Clustering}),
+I due ambiti appena descritti partono dalla stessa interpretazione dei dati, cercando di eseguire una separazione tra le varie traiettorie sulla base delle proprietà dei singoli punti.
+Un'alternativa a questa visione è presente nel clustering basato su forma (\textit{Shape Based Clustering}),
 in cui i raggruppamenti sono basati sulla distribuzione dei punti piuttosto che sulle loro proprietà.
-Questo approccio non si limita ad analizzare solo la dimensione spaziale, ma include nel determinare la
-forma di una traiettoria anche la sua dimensione temporale.
-\textit{PAA} (Piecewise Approximate Aggregate)~\cite{yanagisawa2003shape} e il suo miglioramento~\cite{yanagisawa2006clustering}
-utilizzano la distanza euclidea e DWT per individuare cluster basandosi sulla forma delle singole traiettorie.
+Questo approccio non si limita ad analizzare solo la dimensione spaziale, ma include nel determinare la forma di una traiettoria anche la sua dimensione temporale.

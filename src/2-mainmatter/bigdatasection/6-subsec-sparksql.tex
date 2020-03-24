@@ -1,0 +1,28 @@
+Spark SQL è un modulo costruito sopra Spark.
+Obbiettivo di Spark SQL è quello di poter integrare l'elaborazione di dati strutturati e semi-strutturati tramite primitive simili al linguaggio SQL.
+La necessità alla base di Spark SQL è stata l'integrazione di computazione procedurale e query SQL su database di grandi dimensioni.
+Spark SQL nasce quindi come modulo che integra le API procedurali con il modello relazionale.
+Altri punti fondamentali per Spark SQL sono l'efficienza nelle operazioni e il supporto a diversi database esterni.
+
+Posti questi obbiettivi, il framework Spark SQL fornisce:
+
+\begin{itemize}
+    \item \textbf{Integrazione}.
+    Spark SQL permette di interrogare strutture dati all'interno delle applicazioni Spark.
+    Queste interrogazioni possono essere fatte o tramite API su RDD o con query SQL.
+    Il framework è disponibile per i linguaggi in cui è disponibile Spark.
+    \item \textbf{Compatibilità con Hive}.
+    Viene supportata la sintassi di HiveQL ed è totale la compatibilità con i dati, le query e le user defined function su Hive. 
+    \item \textbf{Connettività Standard}.
+    Vengono supportati gli standard industriali JDBC e ODBC.
+    \item \textbf{Accesso Uniforme ai dati}.
+    Sono supportate diverse fonti di dati, come ad esempio Hive, Avro, JSON o Parquet.
+    Questi dati sono trattati nella stessa maniera e, una volta caricati, possono essere integrati tra di loro.
+    \item \textbf{Scalabilità}.
+    Spark SQL combina la laziness del modello RDD di Spark con una gestione colonnare e un ottimizzatore interno di query per migliorare i risultati.
+\end{itemize}
+
+La caratteristica principale di Spark SQL è la definizione di una nuova astrazione, chiamata Dataframe.
+Un Dataframe è una collezione di dati distribuita organizzata in colonne, rendendolo di fatto equivalente a una tabella relazionale.
+Questa astrazione è basata su RDD, ne conserva quindi tutte le proprietà e modalità di computazione.
+

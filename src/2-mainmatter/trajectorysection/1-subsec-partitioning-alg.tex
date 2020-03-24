@@ -1,0 +1,26 @@
+Gli algoritmi di clustering, oltre alla dimensioni impiegate nella ricerca, possono 
+essere classificati sulla base delle proprietà dei cluster prodotti.
+Tra tutte le proprietà una delle più interessanti è sicuramente la natura partizionante o sovrapposta:
+si definisce un algoritmo partizionante se, dato un punto, questo viene assegnato al massimo a un cluster,
+sovrapposto se questa cardinalità aumenta.
+Anche gli algoritmi di clustering di traiettorie possono essere classificati in partizionanti e sovrapposti.
+
+Il clustering di traiettorie partizionante produce insiemi disgiunti, effettuando quindi una separazione 
+totale tra i percorsi nel dataset.
+Ogni traiettoria è valutata nel suo complesso dal processo di clustering, ciò implica che vengano avvicinati
+i percorsi che sono più complessivamente simili mentre siano distanziati quelli che condividono solo brevi tratti in comune.
+
+\textit{TraceMob} (Transformation, partition clustering and cluster evaluation of moving objects) è un esempio di algoritmo partizionante.
+L'idea alla base del framework è di dividere lo spazio coperto dalle traiettorie in celle di dimensioni 
+\(\alpha * \beta\). 
+Questi parametri determinano la scala dell'analisi: valori alti producono aree grandi, adatte a territori in cui le traiettorie sono molto sparse, valori piccoli invece sono idonei per la ricerca in spazi ad alta densità.
+Successivamente viene calcolata la vicinanza tra tutti gli elementi del dataset: due traiettorie risulteranno vicine se in tutto il loro percorso sono sempre transitate in celle vicine.
+Una volta terminato il calcolo, ogni traiettoria viene proiettata come punto su uno spazio \(d\)-dimensionale.
+La funzione che si occupa di ciò è strutturata in modo da avvicinare le traiettorie simili e separare quelle diverse.
+Infine viene effettuato un clustering partizionante sui punti così generati. 
+Tale operazione produrrà cluster di traiettorie vicine nella loro interezza, separando quelle che 
+divergono in certi istanti.
+
+Il clustering partizionante considera quindi le traiettorie nella loro totalità.
+Ciò può risultare vantaggioso in termini di performance, tuttavia questa modalità 
+ignora le singole caratteristiche locali della traiettoria.

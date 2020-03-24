@@ -1,0 +1,52 @@
+HDFS, o Hadoop Distribuited File System, è il file system distribuito proprietario di Hadoop.
+A differenza della maggior parte dei file system, Hadoop è progettato per operare con file di grandi dimensioni, introducendo politiche di ridondanza sui dati.
+Il file system è stato progettato per operare in batch, ovvero raggruppando prima i dati, piuttosto che in streaming.
+Questo tipo di accesso permette di ottenere un alto throughput, a discapito di una bassa latenza.
+Alla luce di ciò, le applicazioni adottano un modello di accesso ai dati \textit{write-once-read-many}.
+
+I principali punti forza di Hadoop sono:
+
+\begin{itemize}
+    \item \textbf{Computazione distribuita}.
+    Nel momento in cui si tratta di computazione su grandi moli di dati, i costi per spostare i dati attraverso un'infrastruttura di rete possono peggiorare le performance del sistema.
+    Per risolvere questo problema, Hadoop mette a disposizione delle interfacce per spostare la computazione negli stessi nodi, o quantomeno vicino, dove risiedono i dati da elaborare.
+    Questo principio è noto col nome di data locality.
+    
+    \item \textbf{Resilienza ai guasti}.
+    I guasti a livello hardware vanno considerati come naturali nella vita del sistema.
+    Sotto questa prospettiva, HDFS mette in campo tecniche di identificazione dei guasti e di ripristino veloce e automatico dei processi.
+    Grazie anche a questo meccanismo, è possibile gestire hardware differenti tra di loro.
+    
+    \item  \textbf{File system ottimizzato per file di grandi dimensioni}.
+    HDFS definisce word, o blocchi in cui viene suddivisa e indicizzata la memoria del sistema, di dimensioni comprese tra 64 megabyte e un gigabyte.
+    Blocchi di queste dimensioni gestiscono file nell'ordine di gigabyte o terabyte limitando il numero di blocchi in cui vengono divisi.
+    Ciò implica una maggior coesione tra i dati, informazioni vicine e quindi con un alto grado di correlazione sono con buona probabilità salvate all'interno dello stesso blocco.
+    
+\end{itemize}
+
+Passando poi all'architettura di HDFS, i nodi all'interno del sistema operano secondo un pattern master-slave.
+Il master, chiamato NameNode, mantiene in modo persistente l'albero rappresentante il file system, insieme ai metadati collegati a cartelle e file.
+Un altro compito del NameNode è mantenere il riferimento alla posizione di tutte le partizioni, o blocchi, di un certo file all'interno degli slave.
+Infine il master si occupa delle operazioni di input/output sui file, come ad esempio le richieste di apertura, chiusura e cambio di nome.
+
+Gli slave invece sono chiamati DataNode hanno il compito di salvataggio fisico e recupero dei blocchi di ogni file nel cluster.
+I DataNode comunicano periodicamente con il NameNode, inviando l'elenco dei file e blocchi salvati sul singolo nodo.
+Il master al contrario invia ai DataNodes comandi per la creazione e cancellazione di blocchi, che gli slave provvedono ad eseguire.
+
+I singoli nodi sono poi organizzati in rack, che a loro volta sono organizzati in datacenter.
+Questa struttura è rappresentata come un albero, avente nelle foglie i singoli nodi e nella radice il cluster.
+La distanza tra due nodi, fondamentale per il principio di data locality, viene calcolata quindi come la distanza che i due nodi hanno nell'albero.
+
+La struttura del cluster viene sfruttata anche durante il processo di ridondanza dei dati.
+La replicazione dei dati migliora le performance di accesso ai dati e aumenta la robustezza del sistema.
+La ridondanza avviene a livello di blocco: il NameNode mantiene in memoria la lista dei DataNode contenenti un certo blocco.
+Il fattore di replica di default è impostato a 3.
+Queste repliche sono salvate in nodi differenti del sistema aventi posizioni diverse.
+La prima viene salvata sul nodo del client che ha lanciato il comando, la seconda in un nodo appartenente a un rack diverso del primo nodo, il terzo infine in un nodo nello stesso rack del secondo.
+
+Le repliche possono essere ribilanciate in caso di problemi con un certo nodo o con un cambiamento nel cluster, ad esempio l'aggiunta di nuovi nodi.
+Hadoop utilizza la topologia del cluster in combinazione con la replica dei blocchi per applicare il principio della data locality.
+In primo luogo Hadoop cerca di mantenere la località a livello di nodo, poi a livello di rack, datacenter e infine cluster.
+
+HDFS non ha performance efficienti quando viene richiesta una bassa latenza o i singoli file sono di dimensioni piccole.
+La ragione è che HDFS è progettato per computazioni in ambito Big Data, in cui queste situazioni sono rare.

@@ -1,0 +1,30 @@
+CUTE e SPARE entrambi eseguono una ricerca di pattern di co-movimento.
+In tutti e due sono presenti i concetti di lunghezza minima del percorso (\(k, \alpha\)), dimensione minima di un gruppo (\(m, \gamma\)) e massimo gap temporale tra i punti del percorso (\(g, \tau\)).
+
+Parlando poi delle idee di funzionamento dei due algoritmi, in entrambi si utilizzano i concetti di itemset,pruning e monotonicità. 
+In CUTE ciò viene realizzato dividendo lo spazio di ricerca in celle, assegnando a ogni cella l'insieme delle traiettorie che transitano nei suoi confini spazio-temporali e eseguendo poi una variante distribuita dell'algoritmo di Carpenter per ricercare cluster di traiettorie.
+SPARE invece utilizza un approccio basato su itemset solo nella seconda fase, quella relativa al tempo e formula una propria definizione di monotonicità, diversa dalla frequenza, basata su due parametri \(l\) e \(g\).
+Nella prima fase utilizza un clustering spaziale per definire ad ogni istante quali punti sono vicini e quali no.
+
+SPARE prende come ipotesi che per ogni istante della scala temporale, ogni traiettoria abbia al massimo una posizione: questo diventa limitante quando si vuole considerare traiettorie generate da diverse scale di campionamento, poiché l'algoritmo riduce tutte le traiettorie a una scala comune.
+Questo processo di semplificazione comporta una perdita di informazioni.
+
+Anche su CUTE è necessario compiere un'operazione di assimilazione a una stessa scala temporale, tuttavia CUTE pone l'enfasi della sua divisione nella creazione di celle con un certo volume nello spazio-tempo.
+Dal punto di vista temporale, ogni cella non esprime un istante, ma una durata.
+Una traiettoria passa da una cella se transita nei suoi confini anche solo per un istante.
+Questo implica che una traiettoria possa muoversi su un range di celle aventi stesso istante temporale.
+In questo modo CUTE minimizza la perdita di informazione legata all'adozione di una scala temporale univoca su diverse traiettorie.
+
+Dal punto di vista della vicinanza nello spazio, SPARE è più flessibile sulle forme dei cluster, potendo utilizzare vari algoritmi differenti per la creazione di questi.
+Al contrario CUTE ha confini spaziali più rigidi, determinati da una divisione regolare dello spazio.
+SPARE però considera la vicinanza solo in termini relativi, trascurando i movimenti eseguiti dal gruppo tra due istanti temporali.
+CUTE invece permette di esprimere vincoli sulla contiguità spaziale (\(\epsilon\)) tra le varie celle percorse da un gruppo.
+
+Parlando poi della dimensione temporale, CUTE presenta una gestione omogenea rispetto alla dimensione spaziale, processando quindi spazio e tempo assieme, tuttavia l'algoritmo mostra i suoi limiti in corrispondenza di bucket temporali nell'ordine dei secondi o pochi minuti, a causa dell'aumento del numero di celle. 
+SPARE invece ha buone performance anche con bucket temporali nell'ordine dei secondi, inoltre permette una maggiore espressività nei vincoli temporali grazie al vincolo \(l\).
+Dall'altro lato però CUTE è in grado di gestire scale temporale cicliche come i giorni della settimana o le ore del giorno, mentre SPARE è limitato a una scala temporale monotona.
+
+CUTE consente inoltre di processare altre dimensioni senza nessuna ulteriore espansione, mentre SPARE è pensato esclusivamente solo per processare dati spazio-temporali.
+
+Trattando infine i risultati, SPARE genera cluster basati su itemset frequenti massimali, CUTE invece su frequenti chiusi. 
+CUTE quindi, a parità di configurazione, genererà sempre un numero maggiore di risultati rispetto a SPARE.

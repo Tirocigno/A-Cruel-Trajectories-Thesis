@@ -1,0 +1,24 @@
+Negli ultimi anni, la maggiore disponibilità di risorse, le nuove tecniche di elaborazione dati e piattaforme Big Data ha reso possibile gestire dataset di dimensioni sempre maggiori.
+A crescere però non è solo il numero dei dati, ma anche la loro dimensionalità.
+Un caso su tutti è l'ambito bio-informatico: i dataset di espressione dei geni raggiungono 10.000-100.000 attributi per 100-1000 righe.
+Questi dataset sono una sfida per le tecniche di frequent itemset mining per la seguente ragione:
+il numero di itemset candidati cresce esponenzialmente rispetto alle dimensioni del set di attributi.
+Ciò implica che con elevati numeri di attributi, la generazione con le tecniche classiche, come Apriori \cite{agarwal2001tree}, diventi proibitiva.
+Conseguentemente al numero dei candidati aumenta esponenzialmente anche il numero degli itemset frequenti.
+Sono generati infatti, per ogni set frequenti, tutti i suoi possibili subset, in quanto loro stessi frequenti.
+
+Il \textit{colossal itemset mining} si pone come un'estensione del frequent itemset mining volta ad approcciare i dataset con le caratteristiche descritte sopra.
+Questa espansione riguarda l'utilizzo di dati a elevata dimensionalità~\cite{zhu2007mining} all'interno delle operazioni di mining.
+Il principale cambiamento che permette al colossal itemset mining di essere efficiente nell'esplorazione dei possibili itemset sono le proprietà ricercate sopra questi ultimi.
+Gli itemset prodotti sono infatti o chiusi (\cref{definition:closed-itemset}) o massimali (\cref{definition:maximal-itemset}).
+Generando solo pattern di queste due categorie lo spazio di ricerca cala, sebbene non calino le dimensioni degli itemset individuati.
+Affrontando la ricerca con le tecniche di mining tradizionali, come ad esempio Apriori (\cref{subsec:apriori}), il numero di itemset generati e valutati nel caso peggiore è \(2^n\), dove \(n\) è il numero di attributi del dataset.
+Analogamente, dato un itemset chiuso di \(m\) elementi, le ricerche di mining tradizionali richiedono di generare quel pattern e i \(2^m\) figli frequenti per definizione di monotonicità.
+Gli algoritmi di mining colossale non esplorano questi  \(2^m\) figli frequenti e mantengono solo l'itemset chiuso.
+Il numero di pattern individuati e i tempi necessari calano quindi drasticamente, a scapito della granularità della ricerca.
+
+La ricerca di questi pattern è limitativa, ma può produrre comunque risultati validi. 
+Nei casi in cui il dataset abbia un numero elevato di attributi, molto spesso sono ritenuti ``interessanti' solo i gruppi di attributi particolarmente lunghi.
+La ragione è che spesso questi pattern hanno un maggior significato rispetto agli itemset più corti~\cite{zhu2007mining}.
+Ad esempio nell'ambito della bioinformatica sequenze genetiche più lunghe e complesse sono più indicative per determinare la predisposizione a certe malattie.
+Al contrario sequenze brevi hanno spesso relazioni più deboli con potenziali problematiche.

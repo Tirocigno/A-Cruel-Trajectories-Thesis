@@ -1,31 +1,24 @@
-Nella prima fase viene prodotto un dataset nella forma \textit{<t\textsubscript{i}, (c\textsubscript{1},\ldots,c\textsubscript{n})>},
-dove \textit{t\textsubscript{i}} rappresenta l'id di una certa traiettoria, mentre \textit{c\textsubscript{1},\ldots,c\textsubscript{n}}
-l'insieme di celle in cui tale percorso è stato convertito.
-Questo dataset tuttavia non è ancora adatto ad essere sottoposto a mining, poiché in questa situazione l'insieme delle transazioni è composto dalle traiettorie,
-mentre quello delle feature dalle celle.
-Un'operazione di ricerca di regole associative va ad individuare tra le feature quelle che compaiono assieme con almeno una certa frequenza,
-quindi in questo caso il risultato dell'algoritmo sarebbe varii raggruppamenti di celle.
+Nella prima fase viene prodotto un dataset nella forma \(\langle tr_{id}, (q_1,\ldots,q_n) \rangle\),
+dove \(tr_{id}\) rappresenta l'id di una certa traiettoria, mentre \(q_1,\ldots,q_n\)
+l'insieme di quanti in cui tale percorso è stato convertito.
+Scopo di questo secondo passo di CUTE è quindi modificare il dataset ottenuto dalla prima fase in modo da renderlo valido per la ricerca di pattern di movimento.
+Intuitivamente il dataset in output dalla prima fase non è ancora adatto ad essere sottoposto a mining, poiché in questa situazione l'insieme delle transazioni è composto dalle traiettorie,
+mentre quello delle feature dai quanti.
+Un'operazione di ricerca di itemset frequenti va ad individuare tra le feature quelle che compaiono assieme con almeno una certa frequenza,
+quindi in questo caso il risultato dell'algoritmo sarebbe vari raggruppamenti di quanti.
 Questi insiemi possono essere sicuramente utili ad individuare percorsi frequenti e trafficati, ma non sono in grado di descrivere gruppi di movimenti comuni ad un certo insieme di oggetti.
+Come detto nella \cref{subsec:fim-trajectory}, per ottenere la ricerca di gruppi di oggetti bisognerebbe disporre di un dataset avente come transazioni i quanti e come feature le traiettorie.
 
-Scopo di questo secondo passo di \textit{Cu.te} è quindi modificare il dataset ottenuto dalla prima fase
-in modo da renderlo valido per la ricerca di pattern di movimento.
-Per realizzare questa trasformazione, occorre invertire il ruolo di celle e traiettorie all'interno del dataset: prendendo come
-ipotesi di invertire la relazione tra traiettoria e insieme di celle che la compongono, si ottiene la versione trasposta del dataset originale.
-La versione invertita del database sarà quindi composta dalle singole celle del problema che ora saranno identificate
-come le transazioni, mentre il ruolo delle traiettorie sarà di feature. Così facendo ad ogni cella sarà associato l'insieme delle traiettorie di cui
-fa parte.
-In questa situazione la ricerca di itemset frequenti produce raggruppamenti di traiettorie che hanno una frequenza maggiore
-a una certa soglia di supporto.
-Tale soglia può essere interpretata come il numero minimo di celle, ovvero di istanti spazio-temporali, che
-l'intero gruppo di traiettorie deve aver condivisio per essere considerato interessante.
-Alla luce di questa interpreatzione, diviene chiaro che questo vincolo svolge la stessa identica funzione del parametro \textit{k} definito nella~\cref{sec:problem:comovements-pattern},
-per quanto riguarda invece \textit{m}, questo è espresso con  \(~\gamma \), presentato nella~\cref{subsec:cute:parameters}; infine \textit{g} è espresso come \(~\tau \) nella formalizzazione di \textit{Cu.Te}.
+Per ottenere un dataset adatto alla ricerca di gruppi, occorre trasporre il ruolo di quanti e traiettorie: prendendo come
+ipotesi di trasporre la relazione tra traiettoria e insieme di quanti che la compongono, si ottiene la versione trasposta del dataset originale.
+La versione trasposta del database sarà quindi composta dai singoli quanti del problema che ora saranno identificati come transazioni, mentre il ruolo delle traiettorie sarà di feature. 
+Così facendo ad ogni quanto sarà associato l'insieme delle traiettorie in cui compare.
+In questa situazione la ricerca di itemset frequenti produce raggruppamenti di traiettorie che hanno una frequenza maggiore a una certa soglia di supporto.
+Questa frequenza può essere interpretata come il numero minimo di quanti condiviso tra tutti i componenti di un gruppo.
 
-Invertendo il dataset è quindi possibile eseguire una ricerca di comovements pattern, ma l'inversione ha un'altra importante proprietà:
-analizzando il rapporto tra il numero di celle generate nella prima fase e di traiettorie in tutto il dataset, è corretto affermare che
-la quantità di queste ultime superi di gran lunga l'altra. La ricerca di pattern di movimento in città presenta infatti un'area spazio-temporale
-ridotta rispetto agli oggetti che si muovono sopra questa superficie.
-Di conseguenza il dataset che considera come transazioni le celle e come feature le traiettorie sarà etichettabile come dataset ad alta dimensionalità, adatto quindi a essere processato con le tecniche proprie del
-\textit{Colossal Trajectory Mining}.
+Trasponendo il dataset è quindi possibile eseguire una ricerca di gruppi di movimento, ma questa operazione ha anche un'altra importante proprietà.
+Analizzando il rapporto tra il numero di quanti generati nella prima fase e di traiettorie in tutto il dataset, è corretto affermare che
+la quantità di questi superi di gran lunga l'altra.
+Di conseguenza il dataset che considera come transazioni le celle e come feature le traiettorie sarà etichettabile come dataset ad alta dimensionalità, adatto quindi a essere processato con le tecniche proprie del colossal itemset mining.
 
-
+Queste operazioni sono eseguite alla lettera nella ricerca di pattern di movimento: ogni cella individuata diviene così una transazione del dataset utilizzato nella fase successiva.

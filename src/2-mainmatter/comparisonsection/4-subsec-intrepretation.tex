@@ -1,0 +1,16 @@
+Anche utilizzando definizioni di similarità personalizzate sul problema, i risultati fra i due cluster sono comunque molto diversi fra di loro.
+
+Sicuramente entrambi gli algoritmi formalizzano la ricerca di pattern di co-movimento con alcuni elementi in comune, tuttavia l'approccio alla ricerca e la natura stessa degli itemset individuati porta a escludere una casistica reale in cui gli algoritmi individuano esattamente gli stessi cluster.
+È però possibile tentare di massimizzare l'intersezione tra i risultati di questi due algoritmi, sempre tenendo presente che le cardinalità di CUTE sono di molto superiori a quelle di SPARE.
+
+In teoria a parità di risultati sul clustering spaziale dovrebbe garantire quanto meno la totale sovrapposizione totale dei risultati di SPARE su quelli di CUTE.
+Questo perché il tempo viene processato nello stesso modo dai due algoritmi, mentre invece lo spazio no.
+Tuttavia trovare questo punto di intersezione è praticamente impossibile, SPARE valuta i cluster ad ogni istante temporale, definendo potenzialmente una configurazione spaziale diversa ad ogni istante.
+La divisione effettuata da CUTE invece è fissa in tutti gli istanti temporali.
+
+Sia CUTE che SPARE dispongono poi di vincoli che l'altro non non è in grado di coprire.
+Questi devono essere necessariamente rilassati durante il confronto, per non far divergere ulteriormente i risultati.
+Ciò però implica che il potenziale espressivo di questi parametri sia perso nella ricerca.
+
+In definitiva CUTE e SPARE pongono due approcci che possono convergere parzialmente nella ricerca di pattern di co-movimento.
+Allo stesso tempo tuttavia portano un contributo unico alla ricerca che viene minimizzato quando si vuole far convergere i risultati.

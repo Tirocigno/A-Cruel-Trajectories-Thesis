@@ -1,0 +1,38 @@
+Alla luce di quanto mostrato riguardo a itemset individuati e performance, si possono trarre le seguenti considerazioni.
+
+In primo luogo i risultati ottenuti confermano l'importanza della suddivisione in quanti sulla base del sistema di riferimento. 
+Questo è un aspetto delicato. 
+La grana del sistema di riferimento è direttamente collegata con il tipo di pattern che si vuole ricercare.
+Differenti ricerche infatti possono portare a differenti suddivisioni dello spazio di ricerca.
+Ad esempio una ricerca che consideri la rete stradale di una città avrà sempre molti più quanti di una che considera i quartieri o municipalità di una città.
+Occorre quindi valutare il comportamento rispetto alla variazione di transazioni in input e al sistema di riferimento.
+Per simulare questo scenario, sono state utilizzate più griglie che hanno permesso di costruire di volta in volta un numero di transazioni arbitrario.
+
+Dai test svolti è emerso che il comportamento dell'algoritmo al variare del numero di celle può essere riassunto come segue:
+Per ogni dataset, esiste un sistema di riferimento ideale avente una certa granularità.
+Nell'utilizzo di griglie a grana più grossa, a parità di dimensione e supporto minimo, calano le transazioni di esplorare.
+Di conseguenza calano gli itemset validi (per via del supporto) e i tempi di esecuzione.
+Usando griglie a grana troppo fine, il numero di transazioni aumenta, ma diminuisce la lunghezza di ogni transazione.
+In questo caso è la frammentazione a ridurre il numero di elementi in ogni transazione, diminuendo quindi il supporto e la dimensione media degli itemset individuati.
+Questo comporta un maggiore pruning e di conseguenza una riduzione nei tempi di calcolo e negli itemset trovati.
+In entrambi questi due casi, il sistema di riferimento risulta scarsamente compatibile con le caratteristiche spazio-temporali del dataset.
+
+Per quanto riguarda i parametri di supporto \(minsup\) e dimensione \(minsize\), il comportamento dell'algoritmo è in linea con quanto atteso in ogni situazione.
+L'aumentare dei due parametri comporta una riduzione degli itemset validi.
+Il pruning di questi itemset diminuisce il volume della ricerca e di conseguenza il costo computazionale totale. 
+
+Altro punto focale emerso dai test è la debolezza nel vincolo di continuità temporale negli itemset individuati: rispetto a quello spaziale infatti il pruning effettuato è molto più debole.
+Come già affermato precedentemente, questo dipende dalla finezza della scala impiegata.
+Per quanto riguarda la componente spaziale, è improbabile che traiettorie vicine si muovano su celle lontane della mappa.
+Per il tempo invece, come affermato nella \cref{subsec:comp:cluster}, le scale delle ore/giorni risultano poco compatibili con l'alto tempo di campionamento delle traiettorie.
+Sempre collegato ai vincoli di continuità e alla riduzione dello spazio di ricerca, non sempre accade che una riduzione dello spazio di ricerca comporti un calo nei tempi di esecuzione.
+Come affermato nella \cref{subsec:cute:ctm}, il rilassamento dei vincoli sulla continuità nello spazio tempo rende superflue alcune operazione e rende più snella la computazione.
+Se quindi il pruning effettuato da questi vincoli è debole, lo spazio di ricerca non sarà ridotto e sarà esplorato più lentamente per via dei vincoli.
+Oltre a questo, dal punto di vista implementativo la ricerca di swarm produce meno job da eseguire.
+Ogni job spark infatti aggiunge una costo computazionale alla ricerca, in quanto richiede un certo overhead in termini di tempo e risorse per essere creato.
+
+CUTE, come mostrato dai test di scalabilità, ottiene tempi ragionevoli con diverse configurazioni di risorse.
+Ciò è possibile grazie al numero contenuto di celle individuate, che risulta sempre molto minore del numero di traiettorie.
+Qualora si adottasse una scala temporale assoluta o si riducesse di molto l'area spaziale coperta dalla singola cella, le performance di CUTE calerebbero notevolmente.
+La ragione dietro questo calo sarebbe attribuibile all'esplosione del numero di celle.
+Con un numero alto di celle, non solo la creazione delle tabelle di supporto aumenta esponenzialmente, ma vengono meno i principi del mining su dataset colossali, in quanto il numero di transazioni (celle) supera quello di item (traiettorie).

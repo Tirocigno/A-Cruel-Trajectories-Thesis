@@ -1,0 +1,53 @@
+Una delle principali sfide nel distribuire l'algoritmo di Carpenter è la traduzione dei tre vincoli di pruning, pensati per funzionare in maniera centralizzata.
+I primi due sono facilmente riproducibili, ma il terzo è più complicato.
+La ragione è che prevede una struttura di memoria centralizzata dove inserire di volta in volta gli itemset valutati.
+Ovviamente questo non è realizzabile facilmente in contesto distribuito, in quanto l'accesso in scrittura a risorse centralizzate pone diversi problemi, come ad esempio le corse critiche.
+Occorre quindi formulare una nuova definizione per individuare quando un itemset sia già stato valutato o meno.
+Intuitivamente, il supporto di un itemset può essere interpretato come un percorso di quanti.
+Scopo della ricerca di itemset chiusi è di trovare gli itemset aventi maggior supporto: alla luce di quanto detto sopra, il supporto più grande corrisponde al percorso più lungo.
+Avendo le celle un identificatore ordinato, ogni supporto può essere interpretato come un percorso che parte dal quanto con id minore e arriva in quello con supporto maggiore.
+Alla luce di ciò, terzo criterio di pruning di Carpenter può essere riformulato come: ``una tupla deve essere mantenuta se questa sta costruendo il percorso più lungo per un certo itemset, altrimenti questa deve essere scartata''.
+
+Analizzando questo nuovo criterio, il vincolo può essere descritto nei seguenti punti: 
+\begin{itemize}
+    \item Non devono esistere celle con ID minore all'inizio della sequenza che contengono quest'ultima nel loro vicinato.
+    Intuitivamente se ciò accadesse, vorrebbe dire che il percorso massimo non comincia dall'attuale prima cella.
+    In tal caso infatti esisterebbe un'altra cella che genererà lo stesso percorso che sta venendo considerato ma con supporto totale maggiore.
+    Per evitare una ripetizione è necessario quindi scartare l'attuale tupla.
+    \item La somma del supporto totale e delle potenziali celle che contengono l'itemset \(I\) deve avere valore maggiore di \(\alpha\).
+    Se ciò non fosse vero, \(I\) non potrebbe mai raggiungere la soglia di supporto per essere considerato frequente, di conseguenza 
+    sarebbe inutile espandere la tupla nelle iterazioni successive.
+    \item La somma del supporto totale, delle potenziali celle che contengono l'itemset \(I\) da esplorare e delle celle antecedenti alla testa della sequenza valide per il supporto devono coprire tutte le celle che supportano \(I\).
+    In caso contrario, non sarebbero mai considerate potenziali celle per l'espansione.
+    
+\end{itemize}
+La funzione di filtraggio viene formalizzata nell'~\cref{alg:filter}
+\begin{algorithm}[H]
+\caption{Filter}\label{alg:filter}
+\begin{algorithmic}[1]
+\Require $\mathcal{T}$: Insieme delle transazioni, $N$: Vicinato, $\alpha$: soglia di supporto, $\gamma$: soglia di cardinalità.
+\Ensure $l$ è frequente e potenzialmente chiuso. 
+\If{$l.lcluster.size >= \gamma \wedge l.X.size + l.R.size >= \alpha$} \Comment{La tupla ha una cardinalità valida e un supporto potenzialmente buono}
+\State $totalSupport = sup(l.lcluster)$ 
+\If{$!N.isEmpty$}                                    \Comment{Se il vicinato è definito, la tupla deve risultare valida rispetto ai vincoli spazio-temporali}
+\State $minCellID = l.X.min$
+\State $OutlierCells \gets \varnothing$
+\ForEach{$ cell \in totalSupport$}
+\If{$cell.ID >= min.ID \vee minCellID \notin neighborhood(cell)$}
+\State $OutlierCells \cup cell$
+\EndIf
+\EndFor
+\If{$(totalSupport \setminus l.X \setminus l.R \setminus OutlierCells) == \varnothing$} \Comment{Controlla che tutte le celle continue siano dentro X o R}
+\State \Return true
+\EndIf
+\Else  \Comment{Altrimenti controlla che X + R contenga tutte le celle che supportano \(I\)}
+\If{$min(totalSupport) \in l.X \wedge (totalSupport \setminus l.X \setminus l.R) == \varnothing $}
+\State \Return true
+\EndIf
+\EndIf
+\EndIf
+\State \Return false
+\end{algorithmic}
+\end{algorithm}
+
+I vincoli sopra espressi permettono quindi di esprimere un filtro analogo a quello espresso nell'algoritmo di Carpenter.

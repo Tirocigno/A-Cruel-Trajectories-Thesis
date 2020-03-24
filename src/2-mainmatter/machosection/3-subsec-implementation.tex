@@ -1,0 +1,32 @@
+In questa sezione si tratterà di come i passaggi precedenti dell'algoritmo sono implementati e delle problematiche connesse.
+
+Il principale problema da affrontare durante l'implementazione è stata la necessità di progettare strutture adatta a una computazione su Spark.
+Rispetto a quanto visto in Carpenter occorre dunque mettere in campo strategie particolari per adattare l'algoritmo a una piattaforma distribuita.
+
+La fase di Mapping di traiettorie (\cref{subsec:cute:mappingdataset}) viene eseguita per lo più utilizzando query SQL per determinare le varie tabelle.
+In primo luogo si determina la tabella delle celle, successivamente viene effettuato un join tra quest'ultima e la tabella delle traiettorie originali.
+Questa operazione ha il fine di assegnare a ogni traiettoria l'insieme delle sue celle.
+Ultima tabella di supporto generata è quella del vicinato.
+Il vicinato viene generato eseguendo un self join all'interno della tabella delle celle, calcolando per ogni coppia di celle la loro distanza spaziale, temporale e tra le varie dimensioni.
+Tutte queste operazioni sono eseguite con Spark-SQL.
+Terminata la costruzione delle tabelle accessorie, vengono create la tabella delle transazioni e quella trasposta.
+Queste tabelle sono salvate come RDD e trasmesse in broadcast ai vari executors, in modo da avere sempre disponibile l'accesso a queste tabelle nelle varie fasi della computazione distribuita.
+
+Nella fase di astrazione delle traiettorie, (\cref{subsec:cute:transactioncreation}) l'RDD contenente le coppie cella-traiettoria viene trasformato in modo da apparire nella forma cella-lista di traiettorie.
+Questa operazione viene gestita con le primitive di Spark e non comporta accorgimenti particolari.
+
+La fase di mining di gruppi (\cref{subsec:cute:ctm}) è infine la più complicata e delicata.
+L'RDD cella-traiettorie della fase precedente viene trasformato nel primo livello di ricerca dell'algoritmo di Carpenter.
+L'RDD così trasformato si compone di tuple nella forma: \(I, extend, X, R\).
+Per esprimere i set \(I, X, R\) e in generale tutti i set contenenti transazioni o attribuiti si utilizza la classe \texttt{RoaringBitMap} (\cite{GitHubRo61:online}).
+Una RoaringBitMap è un set di \(n\) bit che riesce a esprimere un set di \(n\) numeri interi.
+Questa implementazione risulta efficace e efficiente, poiché permette di rappresentare i set dell'algoritmo in maniera efficiente e efficace nelle operazioni.
+
+Trattando infine dei risultati, l'algoritmo si comporta in maniera diversa a seconda della configurazione specificata dall'utente.
+I gruppi possono essere restituiti a video e salvati su tabella nel caso il loro numero diventi troppo grande per essere processati in maniera efficace.
+In questo caso ad ogni passo dell'algoritmo i risultati sono processati, elaborati e poi scartati.
+Nel caso invece si necessiti di avere i gruppi in una struttura dati per eseguire ulteriori calcoli, allora il processo cambia.
+Tramite il flag \(toStore\) viene valutato se una tupla è già valida per essere restituita in output oppure no.
+A differenza di quanto accade nel caso precedente, i gruppi validi non vengono elaborati ad ogni ciclo, ma vengono collezionati alla fine dell'esecuzione.
+Per eseguire quest'operazione senza intaccare la struttura dell'algoritmo, le tuple valide vengono etichettate con il flag \(toStore\) come vero.
+In questo modo possono rimanere nell'RDD senza essere processate in ulteriori operazioni, se non un ultima fase di filtraggio che elimina tutti i gruppi non validi.

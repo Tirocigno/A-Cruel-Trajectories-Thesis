@@ -1,4 +1,141 @@
 Ultimo e più importante passaggio dell'algoritmo: dato il dataset prodotto in output dalla fase precedente,
-viene eseguita una ricerca di pattern di co-movimento utilizzando i principi del \textit{Colossal Trajectory Mining}.
+viene eseguita una ricerca di gruppi di movimento utilizzando i principi del colossal trajectory mining.
+L'intuizione dietro questa fase si compone dei seguenti passi.
+Per iniziare si considera che ogni quanto corrisponde a un set di traiettorie e quindi a un gruppo.
+Sono scartati i gruppi che non rispettano i vincoli di dimensione.
+Successivamente per ogni gruppo si ricerca il ``percorso più lungo'' che rispetti i vincoli di continuità su tutte le dimensioni.
+Se questo è valido è aggiunto all'output, altrimenti viene scartato.
 
+Scendendo più nel dettaglio, l'idea alla base di quest'ultima fase si ispira a quanto visto nell'algoritmo di Carpenter (\cref{subsec:cute:carpenter}): 
+vengono ripresi e adattati i concetti di row enumeration tree e depth first search, mantenendo la proprietà di 
+chiusura negli itemset individuati.
+Il flusso di CUTE è fortemente ispirato a quello di Carpenter.
+Molti passi sono comuni tra i due algoritmi.
+CUTE tuttavia si pone come evoluzione distribuita di Carpenter pensata per i dati di traiettoria.
+Di conseguenza sono aggiunte e/o modificate alcune strutture.
 
+Il primo cambiamento consiste nella definizione del vicinato di ogni quanto.
+Per ciascun quanto \(q\), si definisce il suo vicinato come l'insieme dei quanti per cui vale che \(d_q(q, q_i) \leq \delta\) per tutti i valori nel vettore \(\delta\).
+Formulando il problema dal punto di vista dei pattern di co-movimento, data una cella \(c\), si definisce vicinato di \(N_{c}\) l'insieme di tutte le celle \(c_{1},\ldots, c_{n}\) tali che \( d_{s}(c, c_{i}) \leq \epsilon \land d_{t}(c, c_{i}) \leq \tau \land c.id < c_{i}.id\).
+Il vicinato risulta fondamentale nel momento in cui si conduce una ricerca specificando una continuità nelle dimensioni di riferimento.
+In particolare per la ricerca di pattern di co-movimento la continuità è espressa tramite i vincoli \(\epsilon\) e \(\tau\).
+Il vincolo sull'id della cella serve ad evitare ridondanze nel vicinato, ogni vicinato infatti contiene solo una parte delle celle effettivamente vicine a quella considerata.
+Ciò però non costituisce un problema, poiché la cella che si sta considerando comparirà nel vicinato di quelle aventi id minore, rendendo così nulla la perdita di informazione.
+In questo modo vengono preservate le proprietà della ricerca depth first.
+Grazie alle limitazioni effettuate sui parametri spazio-temporali e sull'id della cella è possibile ridurre lo spazio di ricerca del problema.
+L'introduzione del concetto di vicinato consente a CUTE di superare i limiti del colossal itemset mining riguardo alla prossimità spazio-temporale delle traiettorie (\cref{subsec:cute:applicationandlimits}).  
+
+Una volta determinato il vicinato per ogni cella, vengono individuati i possibili itemset da ricercare.
+Analogamente a quanto accade nell'algoritmo di Carpenter, gli itemset iniziali sono individuati sulla base della singola transazione.
+Nel caso di CUTE per ogni cella sarà quindi definito un pattern come l'insieme di tutte le traiettorie che sono passate in quella cella.
+Già nel momento della generazione di questi gruppi viene effettuata una prima operazione di pruning: i pattern la cui lunghezza non sia maggiore o uguale a \(\gamma\) sono scartati in quanto non interessanti.
+Gli elementi che superano questa prima fase vengono poi trasformati in tuple analogamente a come accade nell'algoritmo di Carpenter:
+per ciascuno di essi è definito il set di transazioni \(X\) che al momento supportano l'itemset  e l'insieme delle transazioni da esplorare in futuro \(R\). 
+Vale la pena sottolineare che per considerare ogni possibile set di transazioni una volta sola, \(R\) conterrà solo celle aventi id superiore a quelle in \(X\), analogamente a quanto accade per il vicinato.
+
+Successivamente occorre definire una metrica per valutare la possibilità di una tupla di essere ulteriormente espandibile in termini di 
+supporto. 
+Questa metrica definisce ad ogni iterazione quali itemset processare ulteriormente e quali invece possono essere valutati per essere aggiunti 
+all'output del processo.
+L'algoritmo termina la sua computazione quando non è rimasto più nessun itemset da espandere e tutti i risultati sono stati collezionati.
+Lo pseudocodice presente nell'~\cref{alg:cute} descrive il funzionamento dell'algoritmo CUTE.
+\begin{algorithm}[H]
+\caption{CUTE}\label{alg:cute}
+\begin{algorithmic}[1]
+\Require $\mathcal{T}$: insieme delle transazioni, $\alpha$: supporto minimo, $\gamma$: cardinalità minima, $\epsilon$: soglia di vicinanza spaziale, $\tau$: range temporale ,$p$: numero delle partizioni
+\Ensure $\mathcal{C}$: gruppi chiusi rilevati rispetto a $\alpha$, $\gamma$.
+% \State Broadcast $P$ and $Q$
+\State Broadcast $\mathcal{T}$ \Comment{Rende $\mathcal{T}$ disponibile su tutti gli executors}
+\State Compute $N$ as $\{ (I_{q} \{ q \}, \{q', q' \in S, q < q', d\textsubscript{s}(q, q') <= \epsilon,  d\textsubscript{t}(q, q') <= \tau \}), I_{q} \in \mathcal{T}\}$
+\State Broadcast $N$ \Comment{Rende $N$ disponibile su tutti gli executors}
+\State $C \gets \{ (I_{q}, true, \{ q \}, \{q', q' \in S, q < q'\}, false), I_{q} \in \mathcal{T}\}$
+\item[] \Comment{Tuple nella forma (itemset considerato, flag di estensione, supporto, transazioni da esplorare, flag di salvataggio)}
+\item[] \Comment{Esplora tutte le transazioni aventi id > max(supporto).id}
+
+\While{Itemsets with $flag = true$ exist}
+    \State Esegue uno shuffle su $C$ per creare $p$ partizioni bilanciate.
+    \State $C \gets C \cup \bigcup_{(I, f, X, R, tf) \in C} Extend(I, f, X, R, tf, \alpha, \gamma)$
+    \item[] \Comment{Ricerca tutte le possibili espansioni di un itemset}
+\EndWhile
+\State \Return $C$
+\end{algorithmic}
+\end{algorithm}
+
+Punto focale dell'algoritmo è il metodo \(Extend\) il cui pseudocodice è fornito nell'~\cref{alg:extend}
+Qui infatti viene eseguita la creazione, ricerca e filtraggio degli itemset a partire dai gruppi individuati nel primo passo di questa fase.
+L'idea alla base di questo passo dell'algoritmo è generare i gruppi di movimento per costruzione.
+Questa operazione richiede di ``inseguire' il pattern lungo il vicinato.
+In poche parole, partendo da un gruppo potenzialmente valido, ad ogni passo il supporto viene ``espanso'' con l'aggiunta del vicinato e i quanti che contengono il pattern sono aggiunti al supporto.
+
+Nello specifico, come è successo per la generazione degli itemset iniziali, anche qui l'idea alla base rimane la stessa dell'algoritmo di Carpenter.
+Per ogni tupla sono individuate le celle di \(R\) che supportano lo stesso itemset \(I\) e che appartengono al vicinato di una delle celle di \(X\), questo insieme sarà definito \(Y\).
+A differenza di quanto accade in Carpenter, \(Y\) è filtrato sulla base del vicinato delle celle in \(X\).
+A questo punto \(Y\) viene sommato a \(X\), creando il nuovo set di transazioni \(X \cup Y\) e rimosso da \(R\), generando un nuovo spazio di ricerca \(R'\).
+Successivamente si deve considerare il vicinato di tutte le celle in \(Y\), potrebbe infatti capitare che qualcuna delle celle in questione supporti \(I\), in tal caso tale cella sarà aggiunta al passo successivo dell'algoritmo.
+Se ciò non accade, vuol dire che l'insieme \(X\) non può essere ulteriormente espanso in celle con id maggiore senza violare i vincoli sullo spazio-tempo.
+Verificato se la tupla può essere espansa o meno, \(R'\) viene intersecato con il vicinato di \( X \cup Y\), in modo da considerare solamente espansioni valide rispetto ai vincoli spazio-temporali.
+Una volta determinato \(ExpandedR\) viene effettuata la fase di generazione di nuovi itemset vera e propria: per ciascuna cella \(q\) in \(ExpandedR\) avente almeno un item in comune con \(I\) viene generata una tupla nella seguente forma: \((I \cap q.I, X \cup q, ExpandedR \;  \backslash \; q )\).
+Questa tupla sarà poi processata nell'iterazione successiva dell'algoritmo.
+Infine per tutte le tuple processate durante l'attuale passo dell'algoritmo sarà verificato l'effettivo interesse mediante un apposito processo di filtraggio, che manterrà gli itemset validi e andrà a scartare quelli che non soddisfano le condizioni di chiusura, supporto, dimensione o coesione.
+
+\begin{algorithm}
+\caption{Extend}\label{alg:extend}
+\begin{algorithmic}[1]
+\Require $I$: itemset ricercato, $f$: flag per l'estensione, $X$: insieme delle transazioni che supportano \(I\), $R$: transazioni da esplorare, $\alpha$: supporto minimo, $\gamma$: cardinalità minima, $N$: vicinato, ReturnResult:flag per salvare una tupla interessante
+\Ensure $L$: set di itemset frequenti e chiusi.
+\State $L \gets \varnothing $ \Comment{Accumulatore di itemset}
+\If{$!I.toStore$} \Comment{Se la tupla corrente è valutata come da non salvare}
+    \If{$f$} \Comment{Se l'itemset deve essere ulteriormente espanso}
+    \State $Y \gets sup(I) \cap R$ \Comment{Insieme delle transazioni in \(R\) che supportano $I$}
+    \If{$N.isDefined$} \Comment{Se sono definiti dei vincoli spazio-temporali}
+     \State $Y \gets Y \cap allNeighbor(X) $ \Comment{Vengono salvati in \(Y\) solo i valori spazio-temporali idonei}
+    \EndIf
+    \State $X' \gets X \cup Y$ \Comment{... e vengono aggiunti al supporto}
+    \State $R' \gets R \setminus Y$ \Comment{... e tolti da \(R\)}
+    \If{$N.isDefined$}
+    \State ExpandedR = $(R' \cap allNeighbors(XplusY)) \mathbin{\backslash} XplusY$ \Comment{Se in tutte le celle da esplorare}
+    \If{$((ExpandedR \cap sup(I)) = \varnothing)$}\Comment{Nessuno contiene \(I\) per intero}
+     \State $L \gets L \cup \{(I, false, XplusY, R', false)\}$ \Comment{La tupla corrente si trova sul percorso più lungo} 
+     \EndIf
+    \EndIf
+    \ForEach{$I_q \in \mathcal{T} \wedge q \in ExpandedR$} \Comment{Processa tutte le possibili espansioni dell'itemset.}
+        \State $I' \gets I \cap I_q$ \Comment{Genera il nuovo itemset intersecando con $I_q$}
+        \State $X'' \gets X' \cup q$ \Comment{Supporto del nuovo itemset}
+        \State $R' \gets R' \setminus q$ \Comment{Aggiorna lo spazio di ricerca rimanente}
+        \State $L \gets L \cup \{(I'', true, X'', R'', false)\}$ 
+    \EndFor
+    \ForEach{$l \in L$}
+    \If{$(!filter(l) \vee l.X == \varnothing)$} \Comment{Se la tupla non soddisfa i criteri di bontà}
+    \State $L \mathbin{\backslash} l$ \Comment{La tupla è rimossa da R}
+    \EndIf
+    \EndFor
+\Else \Comment{La tupla è già stata processata e non è da salvare...}
+    \State $L \gets L \cup \{(I, false, \{\}, \{\}, false)\}$ \Comment{...viene sostituita da una tupla nulla}
+\EndIf
+\Else \Comment{La tupla è da salvare ed è già stata processata...}
+\State $L \gets L \cup I$
+\EndIf 
+
+\If{ReturnResult}  \Comment{Se i risultati sono restituiti in output dall'algoritmo...}
+\ForEach{$l \in L $}
+\If{$!l.f \wedge l.X.size >= \alpha$} \Comment{Se la tupla considerata è idonea}
+\State $L \mathbin{\backslash} l$ \Comment{La tupla viene rimossa}
+\State $L \cup (l.cluster, l.f, l.X, l,R, true)$ \Comment{e riaggiunta con il flag \(toStore\) settato a true}
+\EndIf
+\EndFor
+\Else
+\ForEach{$l \in L $}
+\If{$!l.f \wedge l.X.size >= \alpha$}
+\State store(l)  \Comment{In caso contrario la tupla viene salvata su tabella remota}
+\EndIf
+\EndFor
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
+L'algoritmo giunge al termine quando non sono più presenti tuple da valutare come da espandere.
+A questo punto l'insieme degli itemset frequenti può essere restituito come output della funzione oppure salvato su tabella remota.
+
+Fino ad ora è stato dato per assodato che \(\epsilon\) e \(\tau\) fossero definiti, potrebbe però capitare di rilassare contemporaneamente entrambi i vincoli.
+Nella ricerca di swarm, la struttura dell'algoritmo non subisce radicali trasformazioni, l'unica differenza sta nel fatto che il vicinato di una cella corrisponde esattamente a \(R\).
+Alla luce di ciò i passaggi e vincoli basati sul vicinato e la sua composizione vengono ignorati, in quanto sarebbero ridondanti o superflui.

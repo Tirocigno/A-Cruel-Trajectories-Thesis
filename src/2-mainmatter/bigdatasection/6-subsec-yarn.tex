@@ -1,0 +1,26 @@
+YARN (Yet Another Resource Negotiator) è il gestore di risorse introdotto con Hadoop 2.0.
+Originalmente sviluppato per migliorare le performance di MapReduce, YARN risulta abbastanza generico per adattarsi anche ad altri paradigmi.
+Compito di questo gestore di risorse è negoziare le componenti necessarie per eseguire una certa applicazione e gestire la computazione distribuita.
+YARN rimane trasparente all'utente: viene usato solamente da framework e mai direttamente dal codice dell'utente.
+
+L'idea alla base di YARN è la separazione tra la gestione dei job e quella delle risorse.
+Questa divisione è ulteriormente accentuata dalla presenza di due demoni che si occupano di questi aspetti.
+YARN si compone di due processi demone:
+
+\begin{itemize}
+    \item \textbf{Resource Manager (RM)}.
+    Demone globale, ne esiste solo uno per cluster, gestisce le risorse tra le varie applicazioni.
+    Si compone di \textit{Scheduler} e \textit{Application Manager}.
+    Il primo si occupa di allocare le risorse per le varie applicazioni, mentre il secondo è responsabile di accettare i job e eventualmente farli ripartire in caso di errori.
+    \item \textbf{Node Manager (NM)}.
+    Uno per ogni nodo slave, si occupa di eseguire i container.
+    Un container è un'entità usata per eseguire un processo con un insieme limitato di risorse.
+    Il Node Manager monitora l'esecuzione dei processi, il loro utilizzo di risorse e riporta i dati sul Resource Manager.
+\end{itemize}
+
+Nel momento in cui viene inviata al sistema la richiesta dell'esecuzione di una nuova applicazione, il RM cerca tra i vari NM uno che possa lanciare l'\textit{Application Master Process}.
+A questo punto l'Application Manager negozia il primo container per eseguire l'AMP, che poi provvederà a richiedere le risorse necessarie.
+Questo processo risulta altamente scalabile: RM infatti delega ai singoli AMP la richiesta delle risorse e di nuovi container.
+In caso di fallimento inoltre è l'Application Master a occuparsi del ripristino.
+
+YARN risulta quindi un framework aperto, che supporta altri paradigmi oltre a Map-Reduce, inoltre si integra bene con i meccanismi nativi di HDFS.

@@ -1,0 +1,156 @@
+Una volta definito che cos'è un dato di traiettoria, occorre mettere in chiaro che cosa distingue una traiettoria da un'altra.
+Per confrontare due traiettorie, sarebbe sbagliato applicare le metriche di similarità per dati a bassa dimensionalità,
+poiché gli oggetti in movimento producono dati complessi e con particolari correlazioni tra le dimensioni.
+Il problema risulta quindi decisamente articolato: una buona metrica di similarità deve tenere conto non solo dei singoli punti, ma anche della
+traiettoria nella sua interezza.
+A questo va sommata la diversa lunghezza tra i due soggetti del confronto.
+In letteratura sono presenti diversi metriche che possono essere impiegate per confrontare due traiettorie:
+
+  La prima tra tutte le misure è la distanza euclidea. Grazie alla sua complessità lineare permette di gestire dati ad alta dimensionalità.
+  Date due traiettorie  \(tr\textsubscript{i}\) e  \(tr\textsubscript{j}\) di lunghezza \(n\) e dimensioni \(p\), la loro distanza euclidea si definisce come:
+
+  \begin{equation}
+    {dist(tr_{i}, tr_{j}) = { {\frac{1}{n} } \sum_{k=1}^{n} {\sqrt{\sum_{m=1}^{p}{(a_{k}^{m} - b_{k}^{m})}^2}}}}
+  \end{equation}
+
+  La metrica tuttavia non è esente da difetti: è molto sensibile al rumore e richiede che le traiettorie siano uguali per numero di punti
+  e dimensioni, inoltre anche l'intervallo di campionamento temporale deve coincidere.
+  Questi limiti sono abbastanza difficili da aggirare quando si processa un dataset reale.
+
+  Per superare questi problemi, sono disponibili diverse varianti della distanza euclidea: una su tutte è la \textit{Principal Component Analysis Plus Euclidean Distance} (PCA + distance)~\cite{zhang2006comparison}.
+  Questa tecnica prima riduce le dimensioni spaziali ad una sola, successivamente esegue un'analisi PCA per convertire ogni traiettoria in
+  \textit{k} coefficienti; a questo punto viene calcolata la distanza euclidea tra le traiettorie così trasformate.
+  L'~\cref{def:PCA} mostra la formula per il calcolo della distanza PCA + distance: \(a_{k}^{c}\) e \(b_{k}^{c}\) rappresentano i
+  \(k\) coefficienti nello spazio bidimensionale delle traiettorie \(tr_{i}\text{,}tr_{j}\). 
+  \begin{equation} \label{def:PCA}
+    {dist(tr_{i}, tr_{j}) = {\sqrt{\sum_{m=1}^{p}{(a_{k}^{c} - b_{k}^{c})}^2}}}
+  \end{equation}
+  Questa variazione mantiene gli stessi punti di forza della versione base della metrica, in più consente una maggior resistenza al rumore.
+
+  La distanza di Hausdorff~\cite{chen2011clustering} è un alternativa a quella euclidea.
+  Date due traiettorie, per ogni punto di una viene calcolato il più vicino punto dell'altra e la distanza tra i due.
+  Il valore della distanza di Hausdorff
+  corrisponde alla massima distanza calcolata nel passo precedente (~\cref{def:Hausdorff}).
+  \begin{equation} \label{def:Hausdorff}
+    \begin{multlined}
+      {D(tr_{i}, tr_{j}) = \max{(h(tr_{i}, tr_{j}), h(tr_{j}, tr_{i}))}} \\
+      ~where~{h(tr_{i}, tr_{j}) = \max_{a \in tr_{i}}{(\min_{b \in tr_{j}}{(dist(a,b))})}}
+    \end{multlined}
+  \end{equation}
+
+  Nella formula \(h\) rappresenta la distanza di Hausdorff diretta, ovvero dai punti di una traiettoria verso l'altra; \(d\) invece sta per la distanza euclidea tra due punti.
+  Il calcolo di entrambe le distanze dirette permette di gestire traiettorie con numero di punti differente tra loro.
+  Questa metrica risulta robusta rispetto all'influenza causata da particolari distribuzioni di punti, ma allo stesso tempo è sensibile al rumore.
+  
+  Longest Common Sub Sequence~\cite{rick2000efficient} affronta il problema con un approccio diverso: invece che calcolare la distanza fra i punti delle due traiettorie, computa la
+  più lunga sotto-sequenza comune ad entrambe.
+  La lunghezza di quest'ultima determina la vicinanza: più il valore è alto, quindi la sotto-sequenza aumenta di dimensioni, più le due traiettorie sono vicine.
+  Essendo impossibile una coincidenza assoluta dei punti tra due traiettorie sono definite due soglie, \(\epsilon \) e \( \sigma \) che rispettivamente
+  modellano la tolleranza rispetto all'asse x e y.
+  L' \cref{def:lcss} definisce la metrica in termini formali: 
+
+  \begin{equation} \label{def:lcss}
+        D(tr_{i}, tr_{j}) =
+        \begin{cases}
+         0 & n = m = 0 \\
+         1 + LCSS_{\epsilon\sigma}(Head(tr_{i}), Head(tr_{j})) & 
+         |a_{i}^{x} - a_{j}^{x}| \leq \epsilon 
+         \land
+         |a_{i}^{x} - a_{j}^{x}| \leq \sigma \\
+         \begin{aligned}
+             \max{(
+             LCSS_{\epsilon~\sigma}{(tr_i, Head(tr_j))}, \\
+             LCSS_{\epsilon~\sigma}{(Head(tr_{i}), tr_{j})}
+             )}
+         \end{aligned}
+         & altrimenti 
+      \end{cases}
+  \end{equation}
+
+  
+  LCSS può essere calcolata in modo ricorsivo, inoltre consente una certa tolleranza rispetto
+  alle deviazioni nei dati, ciò consente una buona efficienza nei dataset reali.
+  Il maggior limite della metrica sta nella definizione dei parametri
+  \(\epsilon \) e \( \sigma \) in problemi complessi.
+
+  Dynamic time warping (DWT)~\cite{chen2005robust} pone il focus sulla dimensione temporale rispetto a quelle spaziali, come accadeva nelle metriche precedenti.
+  Lo scopo è trovare l'allineamento ottimo tra due traiettorie dati certi vincoli.
+  DWT resiste bene alle differenti lunghezze tra traiettorie: obbiettivo della misura è infatti ricercare il percorso a cui assimilare le traiettorie che abbia il minor coefficiente di distorsione
+  calcolato sulle trasformazioni subite dalle traiettorie.
+  
+    \begin{equation} \label{def:dwt}
+     { D_{d}(tr_{i}, tr_{j}) =
+        \begin{cases}
+         0 & n = m = 0 \\
+         \infty & n = 0~||~m = 0 \\
+         dist(a_{i}^{k} - a_{j}^{k}) +
+         \min{
+         \begin{cases}
+         D_{d}(Rest(tr_{i}), Rest(tr_{j}))) \\
+         D_{d}(tr_{i}, Rest(tr_{j})) \\
+         D_{d}(Rest(tr_{i}),tr_{j}) 
+         \end{cases}
+         } & altrimenti
+      \end{cases}
+      }
+  \end{equation}
+  
+  L'~\cref{def:dwt} definisce DWT: la distanza è calcolata in maniera ricorsiva sommando ad ogni passo la distanza degli elementi corrispondenti delle due sequenze.
+  La distanza \(dist\) rappresenta la distanza euclidea tra due punti mentre \(Rest\) indica il segmento di traiettoria non ancora esplorato.
+  Il termine di questo calcolo avviene quando entrambe le traiettorie sono state esplorate.
+  DWT assicura il rispetto dell'ordine tra i punti delle traiettorie, inoltre introducendo un principio di scalabilità locale della dimensione temporale,
+  riesce a gestire scale temporali differenti tra le traiettorie.
+  DWT tuttavia richiede continuità all'interno dei punti, è sensibile al rumore e a sotto-traiettorie molto distanti tra loro.
+
+  Infine si tratta della
+   metrica di Fréchet~\cite{khoshaein2013trajectory}, la quale considera in contemporanea sia la dimensione temporale
+  che quella spaziale.
+  Date due traiettorie di uguale lunghezza \(n\), si calcola la distanza euclidea tra i punti aventi stessa posizione all'interno delle due traiettorie:
+  il valore più alto corrisponde alla distanza di Fréchet.
+  La formula per calcolare la distanza di Fréchet 
+  è mostrata nell'~\cref{def:frechet}:
+  
+    \begin{equation} \label{def:frechet}
+    \begin{multlined}
+      {D_{f}(tr_{i}, tr_{j}) = 
+      \min{||C||}}~\text{dove}~||C|| =
+      \max{}_{k=1}^{K}{(dist(a_{i}^{k},
+      b_{j}^{k}))}
+    \end{multlined}
+  \end{equation}
+  
+  \(D_{f}\) rappresenta la misura della distanza, \(K\)
+  è il valore minore di lunghezza tra \(tr_{i}\) e \(tr_{j}\), \(a_{i}^{k}~\text{e}~
+      b_{j}^{k}\) sono i \(k\)-esimi punti di \(tr_{i} \text{,} tr_{j}\) e infine \(dist\) è la misura della distanza euclidea.
+  Qualora le due traiettorie divergano come dimensioni, si eseguirà questo calcolo su tutte le possibili sotto-traiettorie di lunghezza \(n\) generabili
+  dalla traiettoria più lunga.
+  La distanza di Fréchet considera la traiettoria nella sua continuità, per questo motivo è molto sensibile agli outlier.
+  
+Le diverse misure della distanza hanno costi computazionali differenti tra di loro, che sono riassunti nella~\cref{tab:metric-cost}. 
+
+\begin{table}[H]
+    \centering
+   \begin{tabular}{||c c||}
+ \hline
+ Misura & Costo computazionale \\ [0.5ex] 
+ \hline\hline
+ Euclidea & O(\(n\)) \\ 
+ \hline
+  PCA + Euclidea & O(\(n\)) \\ 
+ \hline
+  Hausdorff & O(\(n*m\)) \\ 
+ \hline
+ LCSS & O(\(n*m\)) \\ 
+ \hline
+ DWT & O(\(n*m\)) \\ 
+ \hline
+ Fréchet & O(\(n*m\)) \\ 
+ \hline
+\end{tabular}
+    \caption{Costi computazionali delle metriche di similarità}
+    \label{tab:metric-cost}
+\end{table}
+
+\begin{center}
+
+\end{center}

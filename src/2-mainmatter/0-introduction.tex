@@ -1,0 +1,37 @@
+La sempre più grande abbondanza di dispositivi in grado di monitorare la posizione degli oggetti ha portato a un'esplosione nelle quantità e qualità di dati di traiettorie.
+Enormi quantità di traiettorie, nella forma di sequenze spazio-temporali di punti, sono registrate ogni momento da chip di controllo di animali, dispositivi GPS su veicoli o su
+piattaforme wearable. 
+Questa grande abbondanza di dati rende possibili diverse tipologie di analisi su dati di traiettoria, come ad esempio la pianificazione del traffico, l'analisi di movimenti di animali e profilazione di un utente sulla base dei suoi movimenti.
+Questi sono solo alcuni esempi di applicazioni del trajectory data mining.
+Scopo di questo ambito del data mining è l'applicazione di algoritmi per estrarre informazione da dati di traiettoria.
+La conoscenza così creata può poi essere impiegata per il miglioramento della qualità della vita del singolo individuo o a supporto delle decisioni in ambito governativo o industriale.
+
+Fra gli scenari più interessanti dell'analisi di traiettorie è l'identificazione di pattern di co-movimento.
+Si definisce pattern di movimento un gruppo di oggetti che hanno viaggiato assieme per un certo periodo di tempo.
+Questa ricerca è direttamente collegata al clustering di traiettorie, il cui obbiettivo è suddividere un insieme di traiettorie in gruppi secondo un determinato criterio.
+Nel caso in cui il criterio di similarità si concentri sui luoghi visitati, allora sarà possibile dedurre dai raggruppamenti quali possono essere le strade o i luoghi più frequentati.
+Se invece l'analisi si pone sugli oggetti e i gruppi che formano nel tempo, allora sarà possibile identificare certe categorie di utenti che viaggiano assieme e i loro comportamenti comuni.
+
+Il lavoro presentato in questa tesi può essere diviso in quattro passi.
+In primo luogo è stato condotto uno studio sullo stato dell'arte del trajectory data mining, soffermandosi sulla definizione di clustering e frequent itemset mining, prestando particolare attenzione alle loro applicazioni all'interno dell'analisi di traiettorie.
+
+Successivamente è stata trattata la ricerca di pattern di co-movimento, con particolare attenzione al framework SPARE.
+Di questo framework, sviluppato in ottica big data, sono state analizzati a fondo funzionamento, potenzialità e limiti.
+
+Una volta terminata questa analisi è stato condotto lo studio e la realizzazione di un nuovo framework, chiamato CUTE, per la ricerca di pattern di movimento.
+A differenza di quanto presente in letteratura, CUTE propone un nuovo approccio distribuito basato sulla divisione dello spazio di ricerca in celle sulla base di un sistema di riferimento arbitrario.
+Lo spazio di ricerca in questione viene composto da un numero custom di dimensioni.
+A questo proposito non ci sono vincoli: possono essere impiegate solo dimensioni spazio-temporali, solo semantiche o un misto tra le due categorie.
+Su queste viene poi eseguita una ricerca mediante tecniche di mining di dati ad alta dimensionalità.
+
+Infine sono stati confrontati i due framework sopracitati, analizzando pregi e svantaggi in determinate situazioni tramite un confronto sui risultati ottenuti.
+
+Alla luce di questo, il documento è strutturato come segue:
+nel \cref{chapter:chapter1} vengono fornite la definizione di traiettoria e dei concetti ad essa collegati, successivamente è analizzato il problema del clustering.
+Questo viene poi declinato nelle applicazione relative ai dati di traiettoria.
+Ciò avviene analogamente anche per il frequent itemset mining.
+Nel \cref{chapter:chapter2} sono brevemente elencate le tecnologie utilizzate durante lo sviluppo dei due framework oggetto della tesi.
+Il \cref{chapter:chapter3} presenta il problema della ricerca dei pattern di movimento, successivamente espone il framework SPARE per l'individuazione di questi pattern.
+Il problema del mining di traiettorie basato su dati ad alta dimensionalità e la sua applicazione nell'algoritmo CUTE sono oggetto del \cref{chapter:chapter4}.
+Il \cref{chapter:chapter5} mostra quali sono stati i test effettuati e i dataset utilizzati per questi, sono inoltre presenti le interpretazioni dei risultati tra i confronti di SPARE e CUTE.
+Nel \cref{chapter:chapter6} infine sono tratte alcune conclusioni sul lavoro svolto e potenziali punti di partenza per ricerche successive.

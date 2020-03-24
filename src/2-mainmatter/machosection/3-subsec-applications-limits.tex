@@ -1,0 +1,28 @@
+Il colossal itemset mining trova diverse applicazioni nel mining di itemset.
+Lo stesso algoritmo di Carpenter ha diversi utilizzi nella ricerca di dati legati al mondo della biologia o medicina.
+In \cite{pan2003carpenter} vengono presentati i risultati su dataset collegati ai carcinomi a polmoni, ovaie e leucemia.
+Questi risultati sono frutto del confronto tra Carpenter e altri due algoritmi di mining di itemset chiusi.
+In media Carpenter risulta molto più veloce e i suoi risultati sono concordi con quanto ottenuto dagli altri due algoritmi.
+
+Parlando poi di traiettorie, è noto che queste non sono semplici sequenze, come affermato nella \cref{subsec:fim-trajectory}.
+I dati di traiettoria hanno una natura spazio-temporali che può essere utilizzata per definire tipi specifici di pattern (\cref{sec:comovement-definition}) e un pruning più efficiente.
+Questo implica che i dati di traiettoria abbiano tra loro strette relazioni spazio-temporali difficili da modellare, come ad esempio vincoli di continuità temporale o contiguità spaziale.
+Gli algoritmi di colossal itemset mining presenti in letteratura~\cite{DBLP:journals/bdr/ApilettiBCGPM17, DBLP:conf/kdd/PanCTYZ03} non sono pensati per sfruttare questi vincoli.
+Sarebbe teoricamente possibile applicare questi vincoli a posteriori, ma sarebbe molto poco efficiente.
+Questi infatti sono in grado di ridurre consistentemente lo spazio di ricerca dei possibili itemset.
+
+Un altro problema comune negli algoritmi di colossal itemset mining è la loro natura centralizzata. 
+Ad esempio Carpenter è realizzato come algoritmo centralizzato: per evitare infatti
+di generare itemset già valutati in iterazione precedenti \(FCP\) viene mantenuto in un registro globale.
+Tradurre questo problema in ambito distribuito pone numerose sfide.
+Alcuni algoritmi in letteratura~\cite{DBLP:journals/bdr/ApilettiBCGPM17, vanahalli2019efficient} realizzano un'implementazione distribuita.
+
+Per concludere, il colossal itemset mining è un approccio interessante per analizzare dati di traiettoria, tuttavia 
+rispetto a quanto presente in letteratura si rende necessario integrare:
+
+\begin{itemize}
+    \item Dataset avente transazioni di ordini di grandezza inferiori al numero delle feature.
+    \item Pruning basato su criteri spazio-temporali oltre che sulla frequenza.
+    \item Gestione della continuità nel tempo e nello spazio.
+    \item Implementazione distribuita.
+\end{itemize}
